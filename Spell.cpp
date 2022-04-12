@@ -10,13 +10,15 @@ Spell::Spell() {
     spellName = "";
     spellHealth = 0;
     spellAttack = 0;
+    spellManaCost = 0;
     spellAbility = 0;
 }
 
 //Perameterized constructor for spell. 
-Spell::Spell(string name, int health, int attack, int ability) {
+Spell::Spell(string name, int health, int attack, int manaCost, int ability) {
     spellName = name;
     spellHealth = health;
+    spellManaCost = manaCost;
     spellAttack = attack;
     spellAbility = ability;
 }
@@ -29,6 +31,11 @@ string Spell::getSpellName() {
 //Gets the spell health
 int Spell::getSpellHealth() {
     return spellHealth;
+}
+
+//Gets spell mana cost
+int Spell::getSpellManaCost() {
+    return spellManaCost;
 }
 
 //Gets the spell attack
@@ -54,6 +61,10 @@ void Spell::setSpellHealth(int _health) {
 //Sets the spell attack
 void Spell::setSpellAttack(int _attack) {
     spellAttack = _attack;
+}
+
+void Spell::setSpellManaCost(int _manaCost) {
+    spellManaCost = _manaCost;
 }
 
 //Sets the spell ability

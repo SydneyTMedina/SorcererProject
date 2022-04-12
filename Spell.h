@@ -16,19 +16,22 @@ private:
     string spellName;
     int spellHealth;
     int spellAttack;
+    int spellManaCost;
     int spellAbility;
     int fireTokens = 0;
     
 public:
     Spell();
-    Spell(string name, int health, int attack, int ability);
+    Spell(string name, int health, int attack, int manaCost, int ability);
     string getSpellName();
     int getSpellHealth();
     int getSpellAttack();
+    int getSpellManaCost();
     int getSpellAbility();
     void setSpellName(string name);
     void setSpellHealth(int health);
     void setSpellAttack(int attack);
+    void setSpellManaCost(int mana);
     void setSpellAbility(int ability);
 
 };

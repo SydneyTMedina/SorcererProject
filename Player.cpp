@@ -58,8 +58,20 @@ int Player::drawSpells() {
 }
 
 //Plays a card from the hand onto the battlefield
-void Player::playCard(BattleField _battleField) {
-    
+bool Player::playCard(int handIndex, BattleField _battleField) {
+    if(isNPC == false) {
+        int cost = playerLibrary.getSpellAt(playerHand.at(handIndex)).getSpellManaCost();
+        if(cost > mana) cout << "You don't have enough mana to play this card!" << endl;
+        else {
+            mana = mana - cost;
+            _battleField.addPlayerMinions(playerHand.at(handIndex));
+            playerLibrary.getSpellAt(playerHand.at(handIndex)).getSpellManaCost();
+            removeSpellFromHand(handIndex);
+        }   
+    }
+    else {
+        //Flesh out this more... Need to add npc decision making
+    }
 }
 
 //Removes a spell from the player hand at a certain index

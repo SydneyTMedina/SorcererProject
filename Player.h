@@ -35,7 +35,7 @@ public:
     void putSpellInGraveyard(int index);
 
     void shuffleDeck();
-    void playCard(BattleField _battleField);
+    bool playCard(int handIndex, BattleField _battleField);
     int getSpellInHandPos(int pos);
     void sortHand();
     void displayHand();

@@ -34,14 +34,7 @@ void Map::resetMap() {
     npcPosition[1] = -1;
 
     npc_on_map = false;
-    misfortune_count = 0;
     site_count = 0;
-
-    for (int i = 0; i < num_misfortunes; i++) {
-        misfortunes[i][0] = -1;
-        misfortunes[i][1] = -1;
-        misfortunes[i][2] = -1;
-    }
 
     for (int i = 0; i < num_sites; i++) {
         sites[i][0] = -1;
@@ -73,21 +66,6 @@ int Map::getSiteCount() {
     return site_count;
 }
 
-int Map::getMisfortuneType(){
-    for(int i = 0; i < misfortune_count; i++){
-        if (playerPosition[0] == misfortunes[i][0] && playerPosition[1] == misfortunes[i][1]){
-            if (misfortunes[i][2] != -1){
-                return misfortunes[i][2];
-            }
-        }
-    }
-    return 0;
-}
-
-int Map::getMisfortuneCount() {
-    return misfortune_count;
-}
-
 int Map::getSiteTrait() {
     for(int i = 0; i < num_sites; i++){
         if (playerPosition[0] == sites[i][0] && playerPosition[1] == sites[i][1]){
@@ -110,29 +88,6 @@ int Map::getSiteTrait() {
 bool Map::isNPCLocation(){
     if (playerPosition[0] == npcPosition[0] && playerPosition[1] == npcPosition[1] && npc_on_map == true){
         return true;
-    }
-    return false;
-}
-
-/*
- * Algorithm: Checks if the location is misfortune  
- * loop i from 0 to misfortune_count
- *      if player position is a misfortune location
- *          if misfortune type is -1
- *              return false
- *          return true  
- * return false
- * Parameters: none
- * Return: boolean (bool)
- */
-bool Map::isMisfortuneLocaton(){
-    for(int i = 0; i < misfortune_count; i++){
-        if (playerPosition[0] == misfortunes[i][0] && playerPosition[1] == misfortunes[i][1]){
-            if (misfortunes[i][2] == -1){
-                return false;
-            }
-            return true;
-        }
     }
     return false;
 }
@@ -161,55 +116,6 @@ bool Map::isSiteLocation(){
 }
 
 /*
- * Algorithm: Checks if a planet is habitable or not
- * Set water, oxygen and fertile_soil to false
- * Set non_habitable_traits to 0 
- * loop i from 0 to num_sites
- *      if site type is 1
- *          Set water to true
- *      else if site type is 2
- *          Set oxygen to true
- *      else if site type is 3
- *          Set fertile_soil to true 
- *      else if site type is between 4 and 6
- *          Increment non_habitable_traits 
- * if water, oxygen, fertile_soil are true and non_habitable_traits <=1
- *      set habitable to true
- * else
- *      set habitable to false
- * return habitable
- * Parameters: none
- * Return: boolean (bool)
- */
-bool Map::isHabitable(){
-    bool water = false;
-    bool oxygen = false;
-    bool fertile_soil = false;
-    int non_habitable_traits = 0;
-    for (int i = 0; i < num_sites; i++){
-        if (sites[i][2] == 1){
-            water = true;
-        } 
-        else if (sites[i][2] == 2){
-            oxygen = true;
-        }
-        else if (sites[i][2] == 3){
-            fertile_soil = true;
-        }
-        else if (sites[i][2] >= 4 && sites[i][2] <= 6){
-            non_habitable_traits++;
-        }
-    }
-    if (water && oxygen && fertile_soil && (non_habitable_traits <= 1)){
-        habitable = true;
-    }
-    else{
-        habitable = false;
-    }
-    return habitable;
-}
-
-/*
  * Algorithm: Checks if the given row and column on map is a free space 
  * if row and column is not within the map boundaries
  *      return false
@@ -229,11 +135,6 @@ bool Map::isFreeSpace(int row, int col){
     if (!(row >= 0 && row < num_rows && col >= 0 && col < num_cols)) {
         return false;
     }
-    for(int i = 0; i < misfortune_count; i++){
-        if (row == misfortunes[i][0] && col == misfortunes[i][1]){
-            return false;
-        }
-    }
     for(int i = 0; i < num_sites; i++){
         if (row == sites[i][0] && col == sites[i][1]){
             return false;
@@ -243,10 +144,6 @@ bool Map::isFreeSpace(int row, int col){
         return false;
     }
     return true;
-}
-
-void Map::setMisfortuneCount(int num_misfortunes){
-    misfortune_count = num_misfortunes;
 }
 
 void Map::setNPC(bool isNpc){
@@ -292,40 +189,7 @@ bool Map::spawnNPC(int row, int col) {
     return true;
 }
 
-/*
- * Algorithm: Create a misfortune on the map 
- * if misfortune_count is more than or equal to number of misfortunes
- *      return false
- * if (row,col) is not a free space
- *      return false
- * if next row in misfortunes matrix is -1 -1
- *      store row, col and type values in the current row of misfortunes matrix
- *      increment misfortune_count
- *      return true
- * Parameters: row (int), col (int), type (int)
- * Return: boolean (bool)
- */
-bool Map::spawnMisfortune(int row, int col, int type) {
 
-    if (misfortune_count >= num_misfortunes) {
-        return false;
-    }
-
-    // location must be blank to spawn
-    if (!isFreeSpace(row, col)) {
-        return false;
-    }
-
-    if (misfortunes[misfortune_count][0] == -1 && misfortunes[misfortune_count][1] == -1) {
-        misfortunes[misfortune_count][0] = row;
-        misfortunes[misfortune_count][1] = col;
-        misfortunes[misfortune_count][2] = type;
-        misfortune_count++;
-        return true;
-    }
-
-    return false;
-}
 
 /*
  * Algorithm: Create a site on the map 
@@ -362,16 +226,6 @@ bool Map::spawnSite(int row, int col, int type) {
     }
 
     return false;
-}
-
-/*
- * Algorithm: This function prints "*" to reveal a position of misfortune
- * Set the value of (row, col) in mapData to '*'
- * Parameters: row (int), col (int)
- * Return: nothing (void)
- */
-void Map::revealMisfortune(int row, int col) {
-    mapData[row][col] = '*';
 }
 
 /*

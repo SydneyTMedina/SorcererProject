@@ -1,5 +1,5 @@
-Blazing Heretic,5,1,0
-Dread Wight,3,1,0
-Dread Wight,3,1,0
-Caretaker,5,4,0
-Stray Sinner,2,2,0
+Blazing Heretic,5,1,2,0
+Dread Wight,3,1,4,0
+Dread Wight,3,1,4,0
+Caretaker,5,4,5,0
+Stray Sinner,2,2,3,0

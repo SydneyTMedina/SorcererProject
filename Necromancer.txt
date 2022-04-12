@@ -1,5 +1,5 @@
-Vengeful Mummy,2,2,0
-Vengeful Mummy,2,2,0
-Council of Three,2,2,0
-Lord of the Undead,4,3,0
-Sekhmet's Champion,5,3,0
+Vengeful Mummy,2,2,1,0
+Vengeful Mummy,2,2,1,0
+Council of Three,2,2,4,0
+Lord of the Undead,4,3,5,0
+Sekhmet's Champion,5,3,5,0
