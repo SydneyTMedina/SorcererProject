@@ -23,9 +23,8 @@ Player::Player(Library deck, bool _isNPC) {
     for(int i = 0; i < playerLibrary.getSpells().size(); i++) {
         playerDeck.push_back(i);
     }
-    playerGraveyard.clear();
     shuffleDeck();
-    for(int i = 0; i < 6; i++) {
+    for(int i = 0; i < 1; i++) {
         drawSpells();
     }
 }
@@ -52,9 +51,14 @@ void Player::setMana(int _mana) {
 
 //Draws spells from the library
 int Player::drawSpells() {
+    if(playerDeck.empty()){
+        return 0;
+        //End game
+    } 
+    
     playerHand.push_back(playerDeck.at(0));
     playerDeck.erase(playerDeck.begin() + 0);
-    return 0;
+    return 1;
 }
 
 //Plays a card from the hand onto the battlefield
@@ -65,13 +69,15 @@ bool Player::playCard(int handIndex, BattleField _battleField) {
         else {
             mana = mana - cost;
             _battleField.addPlayerMinions(playerHand.at(handIndex));
-            playerLibrary.getSpellAt(playerHand.at(handIndex)).getSpellManaCost();
+            //playerLibrary.getSpellAt(playerHand.at(handIndex)).getSpellManaCost();
             removeSpellFromHand(handIndex);
+            return true;
         }   
     }
     else {
-        //Flesh out this more... Need to add npc decision making
+        //Flesh out this more... Needo t add npc decision making
     }
+    return false;
 }
 
 //Removes a spell from the player hand at a certain index
@@ -92,7 +98,7 @@ void Player::shuffleDeck() {
 
 //Sorts the player hand alphabetically
 void Player::sortHand() {
-
+    
 }
 
 //Gets the card in a specific index of the hand vector
@@ -103,6 +109,7 @@ int Player::getSpellInHandPos(int _pos) {
 
 //Displays the players hand with all of the currently held spells and their stats
 void Player::displayHand() {
+    
 
 }
 

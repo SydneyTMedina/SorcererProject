@@ -1,0 +1,1 @@
+g++ -std=c++17 sorcererDriver.cpp Spell.cpp Library.cpp Player.cpp Map.cpp DisplayASCII.cpp BattleField.cpp 
