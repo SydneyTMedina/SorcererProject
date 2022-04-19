@@ -2,6 +2,7 @@
 #include <vector>
 #include "Library.h"
 #include "BattleField.h"
+#include "Game.h"
 #ifndef PLAYER_H
 #define PLAYER_H
 
@@ -21,10 +22,12 @@ private:
     vector<int> playerHand;
     vector<int> playerGraveyard;
     bool isNPC = false;
+    string name;
+    Game game;
     int actions = 6;
     int mana = 6;
 public:
-    Player(Library playerDeck, bool npc);
+    Player(Library playerDeck, bool npc, string name, Game currentGame);
     int getActions();
     void setActions(int numActions);
     int getMana();
@@ -40,5 +43,9 @@ public:
     void sortHand();
     void displayHand();
     void displayGameInfo();
+
+    int getHandSize();
+    Library getLibrary();
+    string getName();
 };
 #endif

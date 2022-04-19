@@ -8,15 +8,15 @@ using namespace std;
 class Game
 {
 private:
-    vector<string> availibleCharacters;
+    vector<string> availibleCharacters = {"Miselda", "Tegu", "Zevrane", "Ariaspes"};
     int citiesCaptured = 0;
-
+    bool wonGame = false;
 public:
-    void loseGame();
+    Game();
+    void loseGame(int condition);
     void winGame();
-    void takeOverCity(int cities);
-
-    
+    void takeOverCity();
+    void removeCharacter(int index);
 };
 
 #endif

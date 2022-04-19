@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "Library.h"
 #include "BattleField.h"
+#include "Game.h"
 using namespace std;
 
 /*
@@ -17,14 +18,16 @@ Initializes the player library by adding values to it up to the size of the libr
 Clears the grave yard
 Shuffles the library and draws 5 cards
 */
-Player::Player(Library deck, bool _isNPC) {
+Player::Player(Library deck, bool _isNPC, string _name, Game _game) {
+    game = _game;
     isNPC = _isNPC;
+    name = _name;
     playerLibrary.setSpells(deck.getSpells());
     for(int i = 0; i < playerLibrary.getSpells().size(); i++) {
         playerDeck.push_back(i);
     }
     shuffleDeck();
-    for(int i = 0; i < 1; i++) {
+    for(int i = 0; i < 4; i++) {
         drawSpells();
     }
 }
@@ -51,9 +54,14 @@ void Player::setMana(int _mana) {
 
 //Draws spells from the library
 int Player::drawSpells() {
+    if(isNPC == true) {
+        if(playerDeck.empty()) {
+            //Win battlefield
+            return 0;
+        }
+    }
     if(playerDeck.empty()){
-        return 0;
-        //End game
+        game.loseGame(1);
     } 
     
     playerHand.push_back(playerDeck.at(0));
@@ -107,15 +115,21 @@ int Player::getSpellInHandPos(int _pos) {
     return playerHand.at(_pos);
 }
 
-//Displays the players hand with all of the currently held spells and their stats
-void Player::displayHand() {
-    
-
-}
-
 //Displays crucial game info to the player
 void Player::displayGameInfo() {
     cout << "You have " << getMana() << " mana and have " << getActions() << " actions left." << endl; 
+}
+
+int Player::getHandSize() {
+    return playerHand.size();
+}
+
+Library Player::getLibrary() {
+    return playerLibrary;
+}
+
+string Player::getName() {
+    return name;
 }
 
 

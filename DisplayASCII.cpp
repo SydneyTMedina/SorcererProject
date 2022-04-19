@@ -2,6 +2,7 @@
 #include "DisplayASCII.h"
 #include <fstream>
 #include <string>
+#include "Spell.h"
 #include <vector>
 using namespace std;
 
@@ -21,11 +22,7 @@ bool DisplayASCII::display(string _fileName) {
     return true;
 }
 
-bool DisplayASCII::displayCard(string _cardName) {
-    _cardName = "|" + _cardName;
-    for(int i = 0; i < _cardName.size(); i++) {
-        
-    }
+bool DisplayASCII::displayCard(Spell _spell) {
     string fileName = "images/cardTemplate.txt";
     ifstream file;
     file.open(fileName);
@@ -35,9 +32,66 @@ bool DisplayASCII::displayCard(string _cardName) {
     while(getline(file, line)) {
         cardData.push_back(line);
     }
-    cardData.insert(cardData.begin() + 1, _cardName);
+    cardData.insert(cardData.begin(), _spell.getSpellName());
+    if(_spell.getSpellManaCost() < 10) {
+        cardData.at(4).replace(12,2, "0" + to_string(_spell.getSpellManaCost()));
+    }
+    else {
+        cardData.at(4).replace(12,2, to_string(_spell.getSpellManaCost()));
+    }
+    if(_spell.getSpellHealth() < 10) {
+        cardData.at(6).replace(9,2, "0" + to_string(_spell.getSpellHealth()));
+    }
+    else {
+        cardData.at(6).replace(9,2, to_string(_spell.getSpellHealth()));
+    }
+    cardData.at(8).replace(9,1, to_string(_spell.getSpellAttack()));
+    
     for(int i = 0; i < cardData.size(); i++) {
         cout << cardData.at(i) << endl;
     }
+    return true;
+}
+
+vector<string> DisplayASCII::getCardLineData(Spell _spell) {
+    string fileName = "images/cardTemplate.txt";
+    ifstream file;
+    vector<string> cardData;
+    file.open(fileName);
+    if(!file.is_open()) return cardData;
+    string line;
+    while(getline(file, line)) {
+        cardData.push_back(line);
+    }
+    cardData.insert(cardData.begin(), _spell.getSpellName());
+    if(_spell.getSpellManaCost() < 10) {
+        cardData.at(4).replace(12,2, "0" + to_string(_spell.getSpellManaCost()));
+    }
+    else {
+        cardData.at(4).replace(12,2, to_string(_spell.getSpellManaCost()));
+    }
+    if(_spell.getSpellHealth() < 10) {
+        cardData.at(6).replace(9,2, "0" + to_string(_spell.getSpellHealth()));
+    }
+    else {
+        cardData.at(6).replace(9,2, to_string(_spell.getSpellHealth()));
+    }
+    cardData.at(8).replace(9,1, to_string(_spell.getSpellAttack()));
+    return cardData;
+}
+
+bool DisplayASCII::displayHand(Player player) {
+    cout << endl << "Your Availible Spells:" << endl << endl;
+    if(player.getHandSize() == 0) {
+        cout << "You have no spells! Memorize more" << endl;
+        return false;
+    }
+    for(int i = 0; i < player.getHandSize(); i++) {
+        cout << "------Spell " << i+1  << "------"<< endl;
+        if(!displayCard(player.getLibrary().getSpellAt(player.getSpellInHandPos(i)))) {
+            return false;
+        }
+    }
+    cout << endl << "Scroll up to look at your availible spells" << endl;
     return true;
 }
