@@ -88,7 +88,22 @@ bool DisplayASCII::displayHand(Player player) {
     }
     for(int i = 0; i < player.getHandSize(); i++) {
         cout << "------Spell " << i+1  << "------"<< endl;
-        if(!displayCard(player.getLibrary().getSpellAt(player.getSpellInHandPos(i)))) {
+        if(!displayCard(player.getSpell(i))) {
+            return false;
+        }
+    }
+    cout << endl << "Scroll up to look at your availible spells" << endl;
+    return true;
+}
+
+bool DisplayASCII::displayBattleField(BattleField _battleField, Player player) {
+    if(_battleField.getPlayerMinions().size() == 0) {
+        cout << "You have no minions on the battle field! " << endl;
+        return false;
+    }
+    for(int i = 0; i < _battleField.getPlayerMinions().size(); i++) {
+        cout << "------Minion " << i+1  << "------"<< endl;
+        if(!displayCard(player.getLibrary().getSpellAt(_battleField.getPlayerMinions().at(i)))) {
             return false;
         }
     }

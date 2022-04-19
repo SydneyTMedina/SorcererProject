@@ -71,6 +71,9 @@ int Player::drawSpells() {
 
 //Plays a card from the hand onto the battlefield
 bool Player::playCard(int handIndex, BattleField _battleField) {
+    if(handIndex < 0) {
+        return false;
+    }
     if(isNPC == false) {
         int cost = playerLibrary.getSpellAt(playerHand.at(handIndex)).getSpellManaCost();
         if(cost > mana) cout << "You don't have enough mana to play this card!" << endl;
@@ -83,7 +86,11 @@ bool Player::playCard(int handIndex, BattleField _battleField) {
         }   
     }
     else {
-        //Flesh out this more... Needo t add npc decision making
+        int cost = playerLibrary.getSpellAt(playerHand.at(handIndex)).getSpellManaCost();
+        mana = mana - cost;
+        _battleField.addEnemyMinions(playerHand.at(handIndex));
+        removeSpellFromHand(handIndex);
+        return true;
     }
     return false;
 }
@@ -110,7 +117,7 @@ void Player::sortHand() {
 }
 
 //Gets the card in a specific index of the hand vector
-int Player::getSpellInHandPos(int _pos) {
+int Player::getSpellIDHandPos(int _pos) {
     if(_pos < 0 || _pos > playerHand.size()) return -1;
     return playerHand.at(_pos);
 }
@@ -130,6 +137,10 @@ Library Player::getLibrary() {
 
 string Player::getName() {
     return name;
+}
+
+Spell Player::getSpell(int _pos) {
+    return playerLibrary.getSpellAt(playerHand.at(_pos));
 }
 
 

@@ -3,6 +3,7 @@
 #include "Library.h"
 #include "BattleField.h"
 #include "Game.h"
+#include "Spell.h"
 #ifndef PLAYER_H
 #define PLAYER_H
 
@@ -39,7 +40,8 @@ public:
 
     void shuffleDeck();
     bool playCard(int handIndex, BattleField _battleField);
-    int getSpellInHandPos(int pos);
+    int getSpellIDHandPos(int pos);
+    Spell getSpell(int pos);
     void sortHand();
     void displayHand();
     void displayGameInfo();

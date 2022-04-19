@@ -1,6 +1,10 @@
 #include "Library.h"
 #include "Player.h"
 #include "DisplayASCII.h"
+#include "Game.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include<time.h>
 #include <vector>
 
 bool menu(DisplayASCII displayASCII) {
@@ -26,7 +30,7 @@ bool menu(DisplayASCII displayASCII) {
     }
 }
 
-Player createPC() {
+Player createPC(Game game) {
     string input;
     vector<string> displayAtEnd;
     string deck1 = "";
@@ -115,19 +119,82 @@ Player createPC() {
     }
     cout << endl << "Your character is: " << displayAtEnd.at(0) << " " << displayAtEnd.at(1) << " Of the " << displayAtEnd.at(2) << endl; 
     Library library = Library(deck1, deck2, deck3);
-    Player player = Player(library, false);
+    Player player = Player(library, false, "", game);
     return player;
 }
 
-void actionPhase(Player player, Player npc, BattleField battleField) {
-    for(int i = 0; i < 6; i++) {
-        string input = "";
-        cout << "What do you want to do?" << endl << endl << "1 -> Cast a spell" << endl << "2 -> Memorize spells" << endl << "3 -> Gain energy" << endl;
+int actionPhase(Player player, Player npc, BattleField battleField, DisplayASCII display) {
+    int actions = 0;
+    while(actions != 6) {
+        int input;
+        cout << "What do you want to do?" << endl << endl << "1 -> Cast a spell" << endl << "2 -> Memorize spells" << 
+        endl << "3 -> Gain energy" << endl << "4 -> See spells" << endl;
         cin >> input;
+        if(input == 1) {
+            if(display.displayHand(player) == false) continue;
+            cin >> input;
+            if(player.playCard(input - 1, battleField) == false) {
+                cout << "Invalid Input" << endl;
+                continue;
+            } 
+        }
+        else if(input == 2) {
+            cout << "You memorized two spells!" << endl;
+            player.drawSpells();
+            player.drawSpells();
+        }
+        else if(input == 3) {
+            cout << "You gained two energy" << endl;
+            player.setMana(player.getMana() + 2);
+        }
+        else if(input == 4) {
+            display.displayHand(player); 
+            continue;
+        }
+        else {
+            cout << "Not a valid input" << endl;
+            continue;
+        }
+
+        //NPC turn
+        srand(time(0));
+        int ranNum = rand() % npc.getHandSize();
+
+        if(npc.getHandSize() == 0) {
+            for(int i = 0; i < 2; i++) {
+                if(npc.drawSpells() == 0) {
+                    cout << "The enemy sorcer " << npc.getName() << " has run out of spells to cast! You won this battle field!" << endl;
+                    return 1;
+                }
+            }
+            cout << endl << npc.getName() << " memorized two spells!";
+            actions++;
+        }
+        else if(npc.getMana() < npc.getSpell(ranNum).getSpellManaCost()) {
+            npc.setMana(2+npc.getMana());
+            cout << endl << npc.getName() << " gained two mana!";
+            actions++;
+        } 
+        else if(npc.getMana() >= npc.getSpell(ranNum).getSpellManaCost()) {
+            npc.playCard(ranNum, battleField);
+        }
     }
+    string emptyInput = "";
+    cout << endl << "The action phase is over! Continuing to the battle phase..." << endl << endl << "Press any key + enter to continue" << endl;
+    cin >> emptyInput;
+    return 0;
+    battlePhase(player, npc, battleField, display);
+}
+
+int battlePhase(Player player, Player npc, BattleField battleField, DisplayASCII display) {
+    int input;
+    cout << "You go first! Choose which creature that you cast do you want to attack with?" << endl << endl << "Press any key + enter to continue" << endl;
+    cin >> input;
+    display.displayBattleField(battleField, player);
 }
 
 int main() {
+    Game game = Game();
     DisplayASCII displayASCII = DisplayASCII();
     displayASCII.display("sorcererMainScreen.txt");
     string tempInput;
@@ -136,7 +203,10 @@ int main() {
     if(menuSelect == false) return 0;
     
     //Create characters here
-    Player player = createPC();
+    Player player = createPC(game);
+    //Map loop here
+    
+
 
 
 }
