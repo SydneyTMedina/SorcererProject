@@ -1,0 +1,10 @@
+Rite of Blades, 0, 0 ,1, 9
+Dagger of Shadows, 1, 2, 1, 8
+Dagger of Shadows, 1, 2, 1, 8
+Sultan's Bane, 1, 3, 1, 4
+Sultan's Bane, 1, 3, 1, 4
+ShadowCast, 0, 0, 1, 13
+ShadowCast, 0, 0, 1, 13
+Soul's Shadow, 2, 2, 2, 8
+Soul's Shadow, 2, 2, 2, 8
+Soul's Shadow, 2, 2, 2, 8
