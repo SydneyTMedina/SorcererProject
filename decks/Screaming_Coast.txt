@@ -1,2 +1,10 @@
-Blazing Heretic,5,1,2,0
-Dread Wight,3,1,4,0
+Lamia,3,4,4,11
+Corpse Feeder,3,3,3,15
+Corpse Feeder,3,3,3,15
+Daugther of Hecate,2,3,4,10
+Daugther of Hecate,2,3,4,10
+Featherless Martyr,3,2,2,7
+Featherless Martyr,3,2,2,7
+Thessalonian Horror,1,3,2,10
+Thessalonian Horror,1,3,2,10
+Thessalonian Horror,1,3,2,10
