@@ -1,2 +1,20 @@
-Blazing Heretic,5,1,2,0
-Dread Wight,3,1,4,0
+Mammon,4,5,5,11
+Belphegor,5,6,6,11
+Asmodeus,6,6,7,12
+Cerberus,1,3,1,10
+Cerberus,1,3,1,10
+Vengeful Baron,3,4,4,10
+Vengeful Baron,3,4,4,10
+Taunting Rarach,1,2,1,5
+Taunting Rarach,1,2,1,5
+Demonic Ambitions,0,0,1,10
+Demonic Ambitions,0,0,1,10
+Innocent Blood,0,0,2,15
+Innocent Blood,0,0,2,15
+Innocent Blood,0,0,2,15
+Lucifer's Jester,3,3,3,10
+Lucifer's Jester,3,3,3,10
+Lucifer's Jester,3,3,3,10
+Impulsive Zealot,1,3,2,0
+Impulsive Zealot,1,3,2,0
+Impulsive Zealot,1,3,2,0
