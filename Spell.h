@@ -33,7 +33,7 @@ public:
     void setSpellAttack(int attack);
     void setSpellManaCost(int mana);
     void setSpellAbility(int ability);
-
+    void displaySpell();
 };
 
 #endif

@@ -4,6 +4,8 @@
 #include <string>
 #include "Spell.h"
 #include <vector>
+#include "Player.h"
+
 using namespace std;
 
 DisplayASCII::DisplayASCII() {

@@ -1,11 +1,14 @@
-#include "Map.h"
 #include <iostream>
+#include <string>
 #include <cmath>
 #include <iomanip>
 #include <stdlib.h>
 #include <fstream>
-using namespace std;
+#include "Map.h"
 #include <time.h>
+#include "Game.h"
+
+using namespace std;
 
 Map::Map()
 {
@@ -159,5 +162,14 @@ void Map::displayMap() {
             }
         }
         cout << endl;
+    }
+}
+
+
+void Map::setSitesClaimed(int sites) {
+    sitesClaimed = sites;
+    if(sitesClaimed >= 3) {
+        Game game = Game();
+        game.winGame();
     }
 }

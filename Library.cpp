@@ -28,16 +28,18 @@ vector<string> split(string inputString, char separator, vector<string> vect) {
 3. Add cards to the spells vector
 */
 void Library::addDeck(string filename) {
+    filename = "decks/" + filename;
     fstream file;
     file.open(filename);
     if(!file.is_open()) {
+        cout << "file did not open" << endl;
         return;
     }
     string line;
     while(getline(file, line)) {
         vector<string> lineData;
         lineData = split(line, ',', lineData);
-        Spell card = Spell(lineData.at(0), stoi(lineData.at(1)), stoi(lineData.at(2)), stoi(lineData.at(3)));
+        Spell card = Spell(lineData.at(0), stoi(lineData.at(1)), stoi(lineData.at(2)), stoi(lineData.at(3)), stoi(lineData.at(4)));
         spells.push_back(card);
     }
 }

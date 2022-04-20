@@ -27,9 +27,7 @@ void Game::loseGame(int _condition) {
 
 }
 
-void Game::takeOverCity() {
-    citiesCaptured++;
-    if(citiesCaptured == 3) {
-        winGame();
-    }
+string Game::getFirstCharacter() {
+    string toReturn = availibleCharacters.at(0);
+    return toReturn;
 }

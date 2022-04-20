@@ -71,3 +71,7 @@ void Spell::setSpellManaCost(int _manaCost) {
 void Spell::setSpellAbility(int _ability) {
     spellAbility = _ability;
 }
+
+void Spell::displaySpell() {
+
+}

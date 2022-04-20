@@ -2,9 +2,12 @@
 #include "Player.h"
 #include "DisplayASCII.h"
 #include "Game.h"
+#include "Map.h"
+#include "Spell.h"
+#include "BattleField.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include<time.h>
+#include <time.h>
 #include <vector>
 
 bool menu(DisplayASCII displayASCII) {
@@ -123,15 +126,25 @@ Player createPC(Game game) {
     return player;
 }
 
+int battlePhase(Player player, Player npc, BattleField battleField, DisplayASCII display) {
+    int input;
+    cout << "You go first! Choose which creature that you cast do you want to attack with?" << endl << endl << "Press any key + enter to continue" << endl;
+    cin >> input;
+    display.displayBattleField(battleField, player);
+    return 0;
+}
+
 int actionPhase(Player player, Player npc, BattleField battleField, DisplayASCII display) {
     int actions = 0;
     while(actions != 6) {
         int input;
         cout << "What do you want to do?" << endl << endl << "1 -> Cast a spell" << endl << "2 -> Memorize spells" << 
         endl << "3 -> Gain energy" << endl << "4 -> See spells" << endl;
+        player.displayGameInfo();
         cin >> input;
         if(input == 1) {
             if(display.displayHand(player) == false) continue;
+            cout << endl <<"Choose what spell to cast:" << endl;
             cin >> input;
             if(player.playCard(input - 1, battleField) == false) {
                 cout << "Invalid Input" << endl;
@@ -158,7 +171,7 @@ int actionPhase(Player player, Player npc, BattleField battleField, DisplayASCII
 
         //NPC turn
         srand(time(0));
-        int ranNum = rand() % npc.getHandSize();
+        int ranNum = (int)rand() % npc.getHandSize();
 
         if(npc.getHandSize() == 0) {
             for(int i = 0; i < 2; i++) {
@@ -167,45 +180,78 @@ int actionPhase(Player player, Player npc, BattleField battleField, DisplayASCII
                     return 1;
                 }
             }
-            cout << endl << npc.getName() << " memorized two spells!";
-            actions++;
+            cout << endl << npc.getName() << " memorized two spells!" << endl;
         }
         else if(npc.getMana() < npc.getSpell(ranNum).getSpellManaCost()) {
             npc.setMana(2+npc.getMana());
-            cout << endl << npc.getName() << " gained two mana!";
-            actions++;
+            cout << endl << npc.getName() << " gained two mana!" << endl << endl;
         } 
         else if(npc.getMana() >= npc.getSpell(ranNum).getSpellManaCost()) {
+            display.displayCard(npc.getSpell(ranNum));
+            cout << endl << npc.getName() << " cast " << npc.getSpell(ranNum).getSpellName() << " on to the battle field!" << endl;
             npc.playCard(ranNum, battleField);
         }
+        actions++;
+        player.setActions(player.getActions() - 1);
     }
     string emptyInput = "";
     cout << endl << "The action phase is over! Continuing to the battle phase..." << endl << endl << "Press any key + enter to continue" << endl;
     cin >> emptyInput;
-    return 0;
     battlePhase(player, npc, battleField, display);
+    return 0;
 }
 
-int battlePhase(Player player, Player npc, BattleField battleField, DisplayASCII display) {
-    int input;
-    cout << "You go first! Choose which creature that you cast do you want to attack with?" << endl << endl << "Press any key + enter to continue" << endl;
-    cin >> input;
-    display.displayBattleField(battleField, player);
+void moveAroundMap(Map map) {
+    while(!map.isSiteLocation(map.getPlayerRowPosition(), map.getPlayerColPosition())) {
+        char movement;
+        map.displayMap();
+        cout << endl << "Use (W,A,S,D) to move your character" << endl;
+        cin >> movement;
+        if(!map.executeMove(movement)) {
+            continue;
+        }
+    }
+    cout << "You have hit a city!" << endl;
 }
 
 int main() {
     Game game = Game();
     DisplayASCII displayASCII = DisplayASCII();
+    Map map = Map();
+    srand(time(0));
+    BattleField battleField1 = BattleField((int)rand()%5 + 5);
+    BattleField battleField2 = BattleField((int)rand()%10 + 5);
+    BattleField battleField3 = BattleField((int)rand()%15 + 5);
+    vector<BattleField> battleFields = {battleField1, battleField2, battleField3};
     displayASCII.display("sorcererMainScreen.txt");
     string tempInput;
     cin >> tempInput;
     bool menuSelect = menu(displayASCII);
     if(menuSelect == false) return 0;
-    
     //Create characters here
     Player player = createPC(game);
+
+    Library npcLib1 = Library(game.getFirstCharacter() + ".txt", "Animist.txt", "Outcast_Sanctuary.txt");
+    Player npc1 = Player(npcLib1, true, game.getFirstCharacter(), game);
+    game.removeCharacter(0);
+
+    Library npcLib2 = Library(game.getFirstCharacter() + ".txt", "Demonologist.txt", "Screaming_Coast.txt");
+    Player npc2 = Player(npcLib2, true, game.getFirstCharacter(), game);
+    game.removeCharacter(0);
+
+    Library npcLib3 = Library(game.getFirstCharacter() + ".txt", "Necromancer.txt", "Haunted_Forest.txt");
+    Player npc3 = Player(npcLib3, true, game.getFirstCharacter(), game);
+    game.removeCharacter(0);
+
+    vector<Player> npcs = {npc1, npc2, npc3};
+
     //Map loop here
-    
+    int battleFieldsHit = 0;
+    map.fillMap();
+    while(true) {
+        moveAroundMap(map);
+        actionPhase(player, npcs.at(battleFieldsHit), battleFields.at(battleFieldsHit), displayASCII);
+    }
 
 
 

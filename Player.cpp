@@ -124,7 +124,7 @@ int Player::getSpellIDHandPos(int _pos) {
 
 //Displays crucial game info to the player
 void Player::displayGameInfo() {
-    cout << "You have " << getMana() << " mana and have " << getActions() << " actions left." << endl; 
+    cout << endl << "You have " << getMana() << " mana and have " << getActions() << " actions left." << endl; 
 }
 
 int Player::getHandSize() {

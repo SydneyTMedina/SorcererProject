@@ -3,6 +3,7 @@
 #include "Spell.h"
 #include "Player.h"
 #include "BattleField.h"
+#include <vector>
 using namespace std;
 
 #ifndef  DISPLAYASCII_H

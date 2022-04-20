@@ -1,9 +1,9 @@
-#ifndef MAP_H
-#define MAP_H
-
 #include <iostream>
 
 using namespace std; 
+
+#ifndef MAP_H
+#define MAP_H
 
 class Map
 {
@@ -31,6 +31,7 @@ class Map
           // setters
           void setPlayerRowPosition(int row);
           void setPlayerColPosition(int col);
+          void setSitesClaimed(int sitesClaimed);
 
           // other
           void displayMap();
