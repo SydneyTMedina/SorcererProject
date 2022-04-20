@@ -1,0 +1,10 @@
+Bernhard,5,5,5,11
+Purifying Widow,4,3,4,2
+Purifying Widow,4,3,4,2
+Venerable Seneschal,3,4,4,18
+Venerable Seneschal,3,4,4,18
+Knight Regent,4,5,5,10
+Knight Regent,4,5,5,10
+Knight Templar,2,3,3,8
+Knight Templar,2,3,3,8
+Knight Templar,2,3,3,8
