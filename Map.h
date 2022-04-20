@@ -8,42 +8,34 @@ using namespace std;
 class Map
 {
      private:
-          static const int num_rows = 12;
+          int mapVersion=0;
+          static const int num_rows = 9;
           static const int num_cols = 12;
-          static const int num_sites = 7;
+          static const int num_sites = 3;
 
           int playerPosition[2];
-          int npcPosition[2];
-          int sites[num_sites][3];
           char mapData[num_rows][num_cols];
 
-          bool npc_on_map;
-          int site_count;
+          int sitesClaimed=0;
 
      public :
           Map();
 
-          void resetMap();
-
           // getters
           int getPlayerRowPosition();
           int getPlayerColPosition();
-          int getSiteCount();
-          int getSiteTrait();
-          bool isNPCLocation();
-          bool isSiteLocation();
-          bool isFreeSpace(int, int);
+          int getSitesClaimed();
+          bool isSiteLocation(int row, int col);
+          bool isMovableSpace(int row, int col);
 
           // setters
-          void setNPC(bool);
-          void setPlayerRowPosition(int);
-          void setPlayerColPosition(int);
+          void setPlayerRowPosition(int row);
+          void setPlayerColPosition(int col);
 
           // other
           void displayMap();
-          bool executeMove(char);
-          bool spawnNPC(int, int);
-          bool spawnSite(int, int, int);
+          bool executeMove(char move);
+          void fillMap();
 
 };
  
