@@ -19,6 +19,7 @@ private:
     int spellManaCost;
     int spellAbility;
     int fireTokens = 0;
+    bool tapped = false;
     
 public:
     Spell();
@@ -34,6 +35,8 @@ public:
     void setSpellManaCost(int mana);
     void setSpellAbility(int ability);
     void displaySpell();
+    bool isTapped();
+    void setIsTapped(bool _tapped);
 };
 
 #endif

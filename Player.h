@@ -1,11 +1,12 @@
 #include <iostream>
 #include <vector>
 #include "Library.h"
-#include "BattleField.h"
 #include "Game.h"
 #include "Spell.h"
 #ifndef PLAYER_H
 #define PLAYER_H
+
+
 
 using namespace std;
 
@@ -19,29 +20,31 @@ class Player
 {
 private:
     Library playerLibrary;
+    Library playerLibraryBackup;
     vector<int> playerDeck;
     vector<int> playerHand;
     vector<int> playerGraveyard;
-    bool isNPC = false;
+    bool NPC = false;
     string name;
     Game game;
-    int actions = 6;
+    int actions = 10;
     int mana = 6;
 public:
-    Player(Library playerDeck, bool npc, string name, Game currentGame);
+    Player(Library &playerDeck, bool npc, string name, Game currentGame);
     int getActions();
     void setActions(int numActions);
     int getMana();
     void setMana(int mana);
+    void resetPlayer();
 
     int drawSpells();
     void removeSpellFromHand(int index);
     void putSpellInGraveyard(int index);
 
     void shuffleDeck();
-    bool playCard(int handIndex, BattleField _battleField);
+    bool isNpc();
     int getSpellIDHandPos(int pos);
-    Spell getSpell(int pos);
+    Spell getSpellInHand(int pos);
     void sortHand();
     void displayHand();
     void displayGameInfo();
@@ -49,5 +52,6 @@ public:
     int getHandSize();
     Library getLibrary();
     string getName();
+    void gainTwoMana();
 };
 #endif

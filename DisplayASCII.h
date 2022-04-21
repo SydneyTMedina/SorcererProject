@@ -19,6 +19,7 @@ public:
     bool displayCard(Spell spell);
     bool displayHand(Player player);
     bool displayBattleField(BattleField battleField, Player player);
+    bool displayEnemyBattleField(BattleField battleField, Player npc);
 };
 
 #endif

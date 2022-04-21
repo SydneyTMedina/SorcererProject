@@ -10,6 +10,8 @@
 #include <time.h>
 #include <vector>
 
+using namespace std;
+
 bool menu(DisplayASCII displayASCII) {
     while(true) {
         string selection = "";
@@ -33,7 +35,7 @@ bool menu(DisplayASCII displayASCII) {
     }
 }
 
-Player createPC(Game game) {
+Player createPC(Game &game) {
     string input;
     vector<string> displayAtEnd;
     string deck1 = "";
@@ -45,21 +47,25 @@ Player createPC(Game game) {
         if(input == "1") {
             deck1 = "Miselda.txt";
             displayAtEnd.push_back("Miselda");
+            game.removeCharacter(0);
             break;
         }
         else if(input == "2") {
             deck1 = "Tegu.txt";
             displayAtEnd.push_back("Tegu");
+            game.removeCharacter(1);
             break;
         }
         else if(input == "3") {
             deck1 = "Zevrane.txt";
             displayAtEnd.push_back("Zevrane");
+            game.removeCharacter(2);
             break;
         }
         else if(input == "4") {
             deck1 = "Ariaspes.txt";
             displayAtEnd.push_back("Ariaspes");
+            game.removeCharacter(3);
             break;
         }
         else {
@@ -126,19 +132,86 @@ Player createPC(Game game) {
     return player;
 }
 
+void waitForPlayer() {
+    cout << endl << "Press any key + enter..." << endl;
+    string ranIN = "";
+    cin >> ranIN;
+}
+
 int battlePhase(Player player, Player npc, BattleField battleField, DisplayASCII display) {
-    int input;
-    cout << "You go first! Choose which creature that you cast do you want to attack with?" << endl << endl << "Press any key + enter to continue" << endl;
-    cin >> input;
-    display.displayBattleField(battleField, player);
+   
+    int input = 0;
+    cout << "You go first!" << endl;
+
+    while(true) {
+        if(battleField.getEnemyMinions().size() == 0 && battleField.getPlayerMinions().size() == 0) {
+            cout << "No player has any minions on the battle field! Returing to prep-phase" << endl;
+            player.resetPlayer();
+            npc.resetPlayer();
+            battleField.resetBattleField();
+            return 1;
+        }
+
+        display.displayEnemyBattleField(battleField, npc);
+        waitForPlayer();
+        display.displayBattleField(battleField, player);
+        if(battleField.getPlayerMinions().size() == 0) {
+            cout << "You have no enemy minions on the battlefield! You will take DOUBLE (2x) damage this turn" << endl;
+            battleField.setEnemyDamageMultiplier(2);
+        }
+        else { 
+            cout << endl << "Which creature do you want to attack with? (Or type -1 to draw and restart)" << endl;
+            input = 0;
+            cin >> input;
+            if(input  == -1) {
+                player.resetPlayer();
+                npc.resetPlayer();
+                battleField.resetBattleField();
+                return 1;
+            }
+            else if(input <= battleField.getPlayerMinions().size() && input >= 1) {
+                Spell spell = player.getLibrary().getSpellAt(battleField.getPlayerMinions().at(input-1));
+                battleField.playerDealDamage(player, npc, spell);
+                waitForPlayer();
+
+                if(battleField.getBattleFieldCondition() == 1) {
+                    break;
+                }
+            }
+            else {
+                cout << "Invalid input!" << endl;
+                continue;
+            
+            }
+        }
+        battleField.setPlayerDamageMultiplier(1);
+        //NPC turn
+        if(battleField.getEnemyMinions().size() == 0) {
+                cout << npc.getName() << " has no enemy minions on the battlefield! They will take DOUBLE (2x) damage this turn" << endl;
+                battleField.setPlayerDamageMultiplier(2);
+        }
+        else {
+            Spell spell = npc.getLibrary().getSpellAt(battleField.getEnemyMinions().at(0));
+            battleField.enemyDealDamage(player, npc, spell);
+            waitForPlayer();
+        }            
+        battleField.setEnemyDamageMultiplier(1);
+        
+    }
+
+    //Successfully captured the battlefield
+    player.resetPlayer();
+    cout << "Successfully captured the battlefield" << endl;
+
     return 0;
 }
 
 int actionPhase(Player player, Player npc, BattleField battleField, DisplayASCII display) {
     int actions = 0;
-    while(actions != 6) {
-        int input;
-        cout << "What do you want to do?" << endl << endl << "1 -> Cast a spell" << endl << "2 -> Memorize spells" << 
+    player.setActions(10);
+    while(actions != 10) {
+        int input = 0;
+        cout << endl << "What do you want to do?" << endl << endl << "1 -> Cast a spell" << endl << "2 -> Memorize spells" << 
         endl << "3 -> Gain energy" << endl << "4 -> See spells" << endl;
         player.displayGameInfo();
         cin >> input;
@@ -146,7 +219,7 @@ int actionPhase(Player player, Player npc, BattleField battleField, DisplayASCII
             if(display.displayHand(player) == false) continue;
             cout << endl <<"Choose what spell to cast:" << endl;
             cin >> input;
-            if(player.playCard(input - 1, battleField) == false) {
+            if(battleField.playCard(input - 1, player) == false) {
                 cout << "Invalid Input" << endl;
                 continue;
             } 
@@ -157,8 +230,8 @@ int actionPhase(Player player, Player npc, BattleField battleField, DisplayASCII
             player.drawSpells();
         }
         else if(input == 3) {
-            cout << "You gained two energy" << endl;
-            player.setMana(player.getMana() + 2);
+            cout << "You gained two mana" << endl;
+            player.gainTwoMana();
         }
         else if(input == 4) {
             display.displayHand(player); 
@@ -171,8 +244,10 @@ int actionPhase(Player player, Player npc, BattleField battleField, DisplayASCII
 
         //NPC turn
         srand(time(0));
-        int ranNum = (int)rand() % npc.getHandSize();
-
+        int ranNum = 0;
+        if(npc.getHandSize() != 0) {
+            ranNum = int(rand() % npc.getHandSize());
+        }
         if(npc.getHandSize() == 0) {
             for(int i = 0; i < 2; i++) {
                 if(npc.drawSpells() == 0) {
@@ -182,36 +257,37 @@ int actionPhase(Player player, Player npc, BattleField battleField, DisplayASCII
             }
             cout << endl << npc.getName() << " memorized two spells!" << endl;
         }
-        else if(npc.getMana() < npc.getSpell(ranNum).getSpellManaCost()) {
-            npc.setMana(2+npc.getMana());
+        else if(npc.getMana() < npc.getSpellInHand(ranNum).getSpellManaCost()) {
+            npc.gainTwoMana();
             cout << endl << npc.getName() << " gained two mana!" << endl << endl;
         } 
-        else if(npc.getMana() >= npc.getSpell(ranNum).getSpellManaCost()) {
-            display.displayCard(npc.getSpell(ranNum));
-            cout << endl << npc.getName() << " cast " << npc.getSpell(ranNum).getSpellName() << " on to the battle field!" << endl;
-            npc.playCard(ranNum, battleField);
+        else if(npc.getMana() >= npc.getSpellInHand(ranNum).getSpellManaCost()) {
+            display.displayCard(npc.getSpellInHand(ranNum));
+            cout << endl << npc.getName() << " cast " << npc.getSpellInHand(ranNum).getSpellName() << " on to the battle field!" << endl;
+            battleField.playCard(ranNum, npc);
         }
         actions++;
         player.setActions(player.getActions() - 1);
     }
-    string emptyInput = "";
-    cout << endl << "The action phase is over! Continuing to the battle phase..." << endl << endl << "Press any key + enter to continue" << endl;
-    cin >> emptyInput;
-    battlePhase(player, npc, battleField, display);
-    return 0;
+    cout << endl << "The action phase is over! Continuing to the battle phase..." << endl;
+    waitForPlayer();
+    if(battlePhase(player, npc, battleField, display) == 0) return 0;
+    else(actionPhase(player, npc, battleField, display));
+    return 1;    
 }
 
-void moveAroundMap(Map map) {
-    while(!map.isSiteLocation(map.getPlayerRowPosition(), map.getPlayerColPosition())) {
+Map moveAroundMap(Map map) {
+    do {
         char movement;
         map.displayMap();
-        cout << endl << "Use (W,A,S,D) to move your character" << endl;
+        cout << endl << "Use (A,S,D) to move your character" << endl;
         cin >> movement;
         if(!map.executeMove(movement)) {
             continue;
         }
     }
-    cout << "You have hit a city!" << endl;
+    while(!map.isSiteLocation(map.getPlayerRowPosition(), map.getPlayerColPosition()));
+    return map;
 }
 
 int main() {
@@ -220,9 +296,8 @@ int main() {
     Map map = Map();
     srand(time(0));
     BattleField battleField1 = BattleField((int)rand()%5 + 5);
-    BattleField battleField2 = BattleField((int)rand()%10 + 5);
-    BattleField battleField3 = BattleField((int)rand()%15 + 5);
-    vector<BattleField> battleFields = {battleField1, battleField2, battleField3};
+    BattleField battleField2 = BattleField((int)rand()%10 + 6);
+    BattleField battleField3 = BattleField((int)rand()%15 + 7);
     displayASCII.display("sorcererMainScreen.txt");
     string tempInput;
     cin >> tempInput;
@@ -243,16 +318,17 @@ int main() {
     Player npc3 = Player(npcLib3, true, game.getFirstCharacter(), game);
     game.removeCharacter(0);
 
-    vector<Player> npcs = {npc1, npc2, npc3};
-
     //Map loop here
     int battleFieldsHit = 0;
     map.fillMap();
-    while(true) {
-        moveAroundMap(map);
-        actionPhase(player, npcs.at(battleFieldsHit), battleFields.at(battleFieldsHit), displayASCII);
-    }
-
-
-
+    map = moveAroundMap(map);
+    //Story for first encounter here
+    actionPhase(player, npc1, battleField1, displayASCII);
+    map = moveAroundMap(map);
+    //Story for second encounter here
+    actionPhase(player, npc2, battleField2, displayASCII);
+    map = moveAroundMap(map);
+    //Story for third and final encounter here
+    actionPhase(player, npc2, battleField3, displayASCII);
+    game.winGame();
 }

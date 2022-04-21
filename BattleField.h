@@ -1,9 +1,13 @@
 #include <iostream>
 #include <vector>
+#include "Player.h"
 using namespace std;
 
 #ifndef BATTLEFIELD_H
 #define BATTLEFIELD_H
+
+
+#include "Spell.h"
 
 /*
 Class definition for BattleField
@@ -13,9 +17,16 @@ Includes Battle field health which determines whether or not the player has capt
 class BattleField
 {
 private:
-    int battleFieldHealth;
+    int playerBattleFieldHealth;
+    int enemyBattleFieldHealth;
+    int maxBattleFieldHealth;
+    int playerDamageMultiplier = 1;
+    int enemyDamageMultiplier = 1;
+    int battleFieldCondition = 0;
     vector<int> playerMinions;
     vector<int> enemyMinions;
+    int playerUnTappedMinions;
+    int enemyUnTappedMinions;
 
 public:
    BattleField(int health);
@@ -25,8 +36,24 @@ public:
    bool removeEnemyMinion(int spell);
    vector<int> getPlayerMinions();
    vector<int> getEnemyMinions();
-   void setBattleFieldHealth(int health);
-   int getBattleFieldHealth();
+
+   void setPlayerBattleFieldHealth(int health);
+   void setEnemyBattleFieldHealth(int health);
+   int getPlayerBattleFieldHealth();
+   int getEnemyBattleFieldHealth();
+
+   void resetBattleField();
+
+   int getPlayerDamageMultiplier();
+   void setPlayerDamageMultiplier(int multipier);
+   int getEnemyDamageMultiplier();
+   void setEnemyDamageMultiplier(int multipier);
+   int getBattleFieldCondition();
+   void setBattleFieldCondition(int condition);
+   bool playCard(int handIndex, Player &player);
+   int playerDealDamage(Player &player, Player &npc, Spell &spell);
+   int enemyDealDamage(Player &player, Player &npc, Spell &spell);
+   
 
 };
 

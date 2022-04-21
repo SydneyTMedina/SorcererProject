@@ -7,7 +7,6 @@
 #include <chrono>
 #include "Player.h"
 #include "Library.h"
-#include "BattleField.h"
 #include "Game.h"
 using namespace std;
 
@@ -18,11 +17,12 @@ Initializes the player library by adding values to it up to the size of the libr
 Clears the grave yard
 Shuffles the library and draws 5 cards
 */
-Player::Player(Library deck, bool _isNPC, string _name, Game _game) {
+Player::Player(Library &deck, bool _isNPC, string _name, Game _game) {
     game = _game;
-    isNPC = _isNPC;
+    NPC = _isNPC;
     name = _name;
     playerLibrary.setSpells(deck.getSpells());
+    playerLibraryBackup.setSpells(deck.getSpells());
     for(int i = 0; i < playerLibrary.getSpells().size(); i++) {
         playerDeck.push_back(i);
     }
@@ -52,9 +52,22 @@ void Player::setMana(int _mana) {
     mana = _mana;
 }
 
+void Player::gainTwoMana() {
+    int newMana = mana + 2;
+    if(newMana >= 10) {
+        cout << "You have reached the maximum amount of mana! (10)" << endl;
+        mana = 10;
+        return;
+    }
+    else {
+        mana += 2;
+        return;
+    }
+}
+
 //Draws spells from the library
 int Player::drawSpells() {
-    if(isNPC == true) {
+    if(NPC == true) {
         if(playerDeck.empty()) {
             //Win battlefield
             return 0;
@@ -69,30 +82,8 @@ int Player::drawSpells() {
     return 1;
 }
 
-//Plays a card from the hand onto the battlefield
-bool Player::playCard(int handIndex, BattleField _battleField) {
-    if(handIndex < 0) {
-        return false;
-    }
-    if(isNPC == false) {
-        int cost = playerLibrary.getSpellAt(playerHand.at(handIndex)).getSpellManaCost();
-        if(cost > mana) cout << "You don't have enough mana to play this card!" << endl;
-        else {
-            mana = mana - cost;
-            _battleField.addPlayerMinions(playerHand.at(handIndex));
-            //playerLibrary.getSpellAt(playerHand.at(handIndex)).getSpellManaCost();
-            removeSpellFromHand(handIndex);
-            return true;
-        }   
-    }
-    else {
-        int cost = playerLibrary.getSpellAt(playerHand.at(handIndex)).getSpellManaCost();
-        mana = mana - cost;
-        _battleField.addEnemyMinions(playerHand.at(handIndex));
-        removeSpellFromHand(handIndex);
-        return true;
-    }
-    return false;
+void Player::putSpellInGraveyard(int cardNum) {
+    playerGraveyard.insert(playerGraveyard.begin() + 0, cardNum);
 }
 
 //Removes a spell from the player hand at a certain index
@@ -139,8 +130,28 @@ string Player::getName() {
     return name;
 }
 
-Spell Player::getSpell(int _pos) {
+Spell Player::getSpellInHand(int _pos) {
     return playerLibrary.getSpellAt(playerHand.at(_pos));
+}
+
+bool Player::isNpc() {
+    return NPC;
+}
+
+void Player::resetPlayer() {
+    actions = 10;
+    mana = 6;
+    playerLibrary.setSpells(playerLibraryBackup.getSpells());
+    playerDeck.clear();
+    playerHand.clear();
+    playerGraveyard.clear();
+    for(int i = 0; i < playerLibrary.getSpells().size(); i++) {
+        playerDeck.push_back(i);
+    }
+    shuffleDeck();
+    for(int i = 0; i < 4; i++) {
+        drawSpells();
+    }
 }
 
 

@@ -90,7 +90,7 @@ bool DisplayASCII::displayHand(Player player) {
     }
     for(int i = 0; i < player.getHandSize(); i++) {
         cout << "------Spell " << i+1  << "------"<< endl;
-        if(!displayCard(player.getSpell(i))) {
+        if(!displayCard(player.getSpellInHand(i))) {
             return false;
         }
     }
@@ -105,10 +105,23 @@ bool DisplayASCII::displayBattleField(BattleField _battleField, Player player) {
     }
     for(int i = 0; i < _battleField.getPlayerMinions().size(); i++) {
         cout << "------Minion " << i+1  << "------"<< endl;
-        if(!displayCard(player.getLibrary().getSpellAt(_battleField.getPlayerMinions().at(i)))) {
-            return false;
-        }
+        Spell spell = player.getLibrary().getSpellAt(_battleField.getPlayerMinions().at(i));
+        if(!spell.isTapped()) displayCard(spell);        
     }
-    cout << endl << "Scroll up to look at your availible spells" << endl;
+    cout << endl << "Scroll up to look at your minions" << endl;
+    return true;
+}
+
+bool DisplayASCII::displayEnemyBattleField(BattleField _battleField, Player npc) {
+    cout << "Enemy minions on the battlefield" << endl;
+    if(_battleField.getEnemyMinions().size() == 0) {
+        cout << "The enemy has no minions on the battle field! " << endl;
+        return false;
+    }
+    for(int i = 0; i < _battleField.getEnemyMinions().size(); i++) {
+        Spell spell = npc.getLibrary().getSpellAt(_battleField.getEnemyMinions().at(i));
+        if(!spell.isTapped()) displayCard(spell);        
+    }
+    cout << endl << "Scroll up to look at the enemy minions on the battlefield" << endl;
     return true;
 }
