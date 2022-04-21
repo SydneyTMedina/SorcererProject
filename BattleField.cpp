@@ -10,10 +10,13 @@
 
 using namespace std;
 
+//constructor that uses health to set both sides's health and the max health. Also sets damage adder to 0
 BattleField::BattleField(int _health) {
     playerBattleFieldHealth = _health;
     enemyBattleFieldHealth = _health;
     maxBattleFieldHealth = _health;
+    damageDifferenceNPC=0;
+    damageDifferencePlayer=0;
 }
 
 //Adds a player minion to the battlefield
@@ -70,7 +73,7 @@ vector<int> BattleField::getEnemyMinions() {
     return toReturn;
 }
 
-//Sets the battle field health
+//Sets the battle field health. If 0 NPC wins
 void BattleField::setPlayerBattleFieldHealth(int _health) {
     playerBattleFieldHealth = _health;
     if(playerBattleFieldHealth <= 0) {
@@ -81,6 +84,7 @@ void BattleField::setPlayerBattleFieldHealth(int _health) {
     }
 }
 
+//Sets the battle field health. If 0 player wins
 void BattleField::setEnemyBattleFieldHealth(int _health) {
     enemyBattleFieldHealth = _health;
     if(enemyBattleFieldHealth <= 0) {
@@ -94,40 +98,169 @@ int BattleField::getPlayerBattleFieldHealth() {
     return playerBattleFieldHealth;
 }
 
+//Gets the battle field health
 int BattleField::getEnemyBattleFieldHealth() {
     return enemyBattleFieldHealth;
 }
 
+//Gets the DamageMultiplier
 int BattleField::getPlayerDamageMultiplier() {
     return playerDamageMultiplier;
 }
 
-void BattleField::setPlayerDamageMultiplier(int _multiplier) {
-    playerDamageMultiplier = _multiplier;
-}
-
+//Gets the win or lose status of battlefield
 int BattleField::getBattleFieldCondition() {
     return battleFieldCondition;
 }
 
-void BattleField::setBattleFieldCondition(int _condition) {
-    battleFieldCondition = _condition;
+//Gets damage modifier for NPC
+int BattleField::getDamageDifferenceNPC(){
+    return damageDifferenceNPC;
 }
 
+//Gets damage modifier for Player
+int BattleField::getDamageDifferencePlayer(){
+    return damageDifferencePlayer;
+}
+
+//Gets damage multiplier for NPC
 int BattleField::getEnemyDamageMultiplier() {
     return enemyDamageMultiplier;
 }
 
+//Sets damage multiplier for Player
+void BattleField::setPlayerDamageMultiplier(int _multiplier) {
+    playerDamageMultiplier = _multiplier;
+}
+
+//Sets battlefield condition
+void BattleField::setBattleFieldCondition(int _condition) {
+    battleFieldCondition = _condition;
+}
+
+//Sets damage modifier for NPC
+void BattleField::setdamageDifferenceNPC(int damage){
+    damageDifferenceNPC=damage;
+}
+//Sets damage modifier for Player
+void BattleField::setdamageDifferencePlayer(int damage){
+    damageDifferencePlayer=damage;
+}
+
+//Sets damage multiplier for NPC
 void BattleField::setEnemyDamageMultiplier(int _multiplier) {
     enemyDamageMultiplier = _multiplier;
 }
 
+//reset the battlefield
 void BattleField::resetBattleField() {
     playerBattleFieldHealth = maxBattleFieldHealth;
     enemyBattleFieldHealth = maxBattleFieldHealth;
     playerMinions.clear();
     enemyMinions.clear();
 }
+
+/*
+Executes the ability based on the assigned int
+Includes attack bonuses, debuffs, extra cards, more mana...
+*/
+void BattleField::abilityExecute(int ability, bool isPlayer, Player &player){
+    if(ability==1){//Add 1 attack
+       if(isPlayer==true)
+           damageDifferencePlayer= 1 + damageDifferencePlayer;
+       else
+           damageDifferenceNPC= 1 + damageDifferenceNPC;
+
+    }
+    else if(ability==2){//Add 2 attack
+       if(isPlayer==true)
+           damageDifferencePlayer= 2 + damageDifferencePlayer;
+       else
+           damageDifferenceNPC= 2 + damageDifferenceNPC;
+
+    }
+    else if(ability==3){//Subtract 1 attack from the enemy
+       if(isPlayer==true)
+           damageDifferenceNPC= damageDifferenceNPC - 1;
+       else
+          damageDifferencePlayer= damageDifferencePlayer - 1;
+
+    }
+    else if(ability==4){//Subtract 2 attack from the enemy
+       if(isPlayer==true)
+           damageDifferenceNPC= damageDifferenceNPC - 2;
+       else
+          damageDifferencePlayer= damageDifferencePlayer - 2;
+
+    }
+    else if(ability==5 || ability==11){//Remove enemy attack  PROBLEM!!!! WE NEED IT TO ONLY ELEIMINATE ONE ATTACK
+       if(isPlayer==true)
+           enemyDamageMultiplier= 0;
+       else
+          playerDamageMultiplier= damageDifferencePlayer - 1;
+
+    }
+    else if(ability==6){//Draw 2 Cards
+           player.drawSpells();
+           player.drawSpells();
+
+    }
+    else if(ability==7){//Get the top graveyard card WHATS THE POINT OF A GRAVEYARD
+           player.
+    }
+    else if(ability==8){//Get the 2 top graveyard cards
+
+    }
+    else if(ability==9){//Add 2 mana
+           player.gainTwoMana();
+    }
+    else if(ability==10){//Add 4 mana
+           player.gainTwoMana();
+           player.gainTwoMana();
+
+    }
+    else if(ability==12){//Gain 3 health for the battlefield //PROBLEM. What good is battlefield health if that only happens when all cards are gone
+       if(isPlayer==true)//could do get extra action, remove an action
+           playerBattleFieldHealth= playerBattleFieldHealth + 3;
+       else
+           enemyBattleFieldHealth= enemyBattleFieldHealth + 3;
+
+    }
+    else if(ability==13){//Gain 5 health for the battlefield
+       if(isPlayer==true)
+           playerBattleFieldHealth= playerBattleFieldHealth + 5;
+       else
+           enemyBattleFieldHealth= enemyBattleFieldHealth + 5;
+    }
+    else if(ability==14){//Add 4 attack
+       if(isPlayer==true)
+           damageDifferencePlayer= 4 + damageDifferencePlayer;
+       else
+           damageDifferenceNPC= 4 + damageDifferenceNPC;
+
+    }
+    else if(ability==15){//Damage Halfed
+       if(isPlayer==true)
+           playerDamageMultiplier=playerDamageMultiplier*2;
+      else
+           enemyDamageMultiplier=enemyDamageMultiplier*2;
+    }
+    else if(ability==16){//Damage Doubled
+      if(isPlayer==true)
+           enemyDamageMultiplier=enemyDamageMultiplier/2;
+      else
+           playerDamageMultiplier=playerDamageMultiplier/2;
+    }
+    else if(ability==17){//Clear Battlefield. Cards will not go to graveyard If no cards, do they get more actions?
+    int sizeOne=getPlayerMinions.size();
+    int sizeTwo=getEnemyMinions.size();
+      for(int i=0;i<sizeOne;i++){
+          getPlayerMinions().
+
+      }
+    }
+}
+
 
 //Plays a card from the hand onto the battlefield
 bool BattleField::playCard(int handIndex, Player &player) {
@@ -141,11 +274,12 @@ bool BattleField::playCard(int handIndex, Player &player) {
         else {
             player.setMana(player.getMana() - cost);
             if(spell.getSpellHealth() == 0) {
-                //Activate spell ablility
+                abilityExecute(spell.getSpellAbility(),player.isNpc(), player);
+                
             }
             else {
                 addPlayerMinions(player.getSpellIDHandPos(handIndex));
-                //Activate spell ability
+                abilityExecute(spell.getSpellAbility(),player.isNpc(), player);
             }
             player.removeSpellFromHand(handIndex);
             return true;
@@ -166,7 +300,7 @@ int BattleField::playerDealDamage(Player &player, Player &npc, Spell &spell) {
     int damageTotal = spell.getSpellAttack();
     spell.setIsTapped(true);
     int numKills = 0;
-    damageTotal = damageTotal * playerDamageMultiplier;
+    damageTotal = (damageTotal+damageDifferencePlayer) * playerDamageMultiplier;
     int maxDamage = damageTotal;
 
     if(enemyMinions.size() == 0) {
@@ -209,7 +343,7 @@ int BattleField::enemyDealDamage(Player &player, Player &npc, Spell &spell) {
     int damageTotal = spell.getSpellAttack();
     spell.setIsTapped(true);
     int numKills = 0;
-    damageTotal = damageTotal * enemyDamageMultiplier;
+    damageTotal = (damageTotal+damageDifferenceNPC) * enemyDamageMultiplier;
     int maxDamage = damageTotal;
 
     if(playerMinions.size() == 0) {

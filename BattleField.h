@@ -27,6 +27,8 @@ private:
     vector<int> enemyMinions;
     int playerUnTappedMinions;
     int enemyUnTappedMinions;
+    int damageDifferenceNPC;
+    int damageDifferencePlayer;
 
 public:
    BattleField(int health);
@@ -39,8 +41,14 @@ public:
 
    void setPlayerBattleFieldHealth(int health);
    void setEnemyBattleFieldHealth(int health);
+   void setdamageDifferenceNPC(int damage);
+   void setdamageDifferencePlayer(int damage);
+
    int getPlayerBattleFieldHealth();
    int getEnemyBattleFieldHealth();
+   int getDamageDifferenceNPC();
+   int getDamageDifferencePlayer();
+
 
    void resetBattleField();
 
@@ -53,6 +61,7 @@ public:
    bool playCard(int handIndex, Player &player);
    int playerDealDamage(Player &player, Player &npc, Spell &spell);
    int enemyDealDamage(Player &player, Player &npc, Spell &spell);
+   void abilityExecute(int ability, bool isPlayer)
    
 
 };
