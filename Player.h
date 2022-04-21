@@ -36,10 +36,12 @@ public:
     int getMana();
     void setMana(int mana);
     void resetPlayer();
+    vector<int> getPlayerHand();
 
     int drawSpells();
     void removeSpellFromHand(int index);
     void putSpellInGraveyard(int index);
+    bool compareFunction(int _a, int _b);
 
     void shuffleDeck();
     bool isNpc();

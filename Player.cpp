@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "Library.h"
 #include "Game.h"
+#include <algorithm>
 using namespace std;
 
 /*
@@ -30,6 +31,7 @@ Player::Player(Library &deck, bool _isNPC, string _name, Game _game) {
     for(int i = 0; i < 4; i++) {
         drawSpells();
     }
+    sortHand();
 }
 
 //Sets the number of actions a player has
@@ -79,6 +81,7 @@ int Player::drawSpells() {
     
     playerHand.push_back(playerDeck.at(0));
     playerDeck.erase(playerDeck.begin() + 0);
+    sortHand();
     return 1;
 }
 
@@ -102,9 +105,17 @@ void Player::shuffleDeck() {
     shuffle(playerDeck.begin(), playerDeck.end(), e);
 }
 
+bool Player::compareFunction(int a, int b) {
+    string string1 = playerLibrary.getSpellAt(a).getSpellName();
+    string string2 = playerLibrary.getSpellAt(b).getSpellName();
+    return string1 < string2;
+}
+
 //Sorts the player hand alphabetically
 void Player::sortHand() {
-    
+    sort(playerHand.begin(),playerHand.end(),[this](int a, int b) {
+             return (compareFunction(a,b));
+    });
 }
 
 //Gets the card in a specific index of the hand vector
@@ -152,6 +163,11 @@ void Player::resetPlayer() {
     for(int i = 0; i < 4; i++) {
         drawSpells();
     }
+    sortHand();
+}
+
+vector<int> Player::getPlayerHand() {
+    return playerHand;
 }
 
 

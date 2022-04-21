@@ -10,6 +10,8 @@
 
 using namespace std;
 
+
+//Defaut constructor for the map class
 Map::Map()
 {
     srand(time(NULL));
@@ -168,7 +170,7 @@ void Map::displayMap() {
     }
 }
 
-
+//Sets to see if all the sites have been claimed, if they have, the player wins
 void Map::setSitesClaimed(int sites) {
     sitesClaimed = sites;
     if(sitesClaimed >= 3) {

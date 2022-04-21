@@ -10,6 +10,19 @@
 #include <time.h>
 #include <vector>
 
+
+/*
+TO DO:
+Add the rest of the menu options for the main menu like how to play
+Add the story elements in the main function for when you reached a battlefield
+Fix looping input bug - DONE
+Finish abilities - DONE
+Add sorting algorithm - DONE
+Make sure code meets requirements
+Add file output with the stats
+SUBMIT
+*/
+
 using namespace std;
 
 bool menu(DisplayASCII displayASCII) {
@@ -163,6 +176,12 @@ int battlePhase(Player player, Player npc, BattleField battleField, DisplayASCII
             cout << endl << "Which creature do you want to attack with? (Or type -1 to draw and restart)" << endl;
             input = 0;
             cin >> input;
+            if(cin.fail()) {
+                cout << "Invalid input!" << endl;
+                cin.clear();
+                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                continue;
+            }
             if(input  == -1) {
                 player.resetPlayer();
                 npc.resetPlayer();
@@ -215,10 +234,22 @@ int actionPhase(Player player, Player npc, BattleField battleField, DisplayASCII
         endl << "3 -> Gain energy" << endl << "4 -> See spells" << endl;
         player.displayGameInfo();
         cin >> input;
+        if(cin.fail()) {
+            cout << "Invalid input!" << endl;
+            cin.clear();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            continue;
+        }
         if(input == 1) {
             if(display.displayHand(player) == false) continue;
             cout << endl <<"Choose what spell to cast:" << endl;
             cin >> input;
+            if(cin.fail()) {
+                cout << "Invalid input!" << endl;
+                cin.clear();
+                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                continue;
+            }
             if(battleField.playCard(input - 1, player) == false) {
                 cout << "Invalid Input" << endl;
                 continue;
@@ -262,7 +293,7 @@ int actionPhase(Player player, Player npc, BattleField battleField, DisplayASCII
             cout << endl << npc.getName() << " gained two mana!" << endl << endl;
         } 
         else if(npc.getMana() >= npc.getSpellInHand(ranNum).getSpellManaCost()) {
-            display.displayCard(npc.getSpellInHand(ranNum));
+            display.displayCard(npc.getSpellInHand(ranNum), true);
             cout << endl << npc.getName() << " cast " << npc.getSpellInHand(ranNum).getSpellName() << " on to the battle field!" << endl;
             battleField.playCard(ranNum, npc);
         }
@@ -295,9 +326,9 @@ int main() {
     DisplayASCII displayASCII = DisplayASCII();
     Map map = Map();
     srand(time(0));
-    BattleField battleField1 = BattleField((int)rand()%5 + 5);
-    BattleField battleField2 = BattleField((int)rand()%10 + 6);
-    BattleField battleField3 = BattleField((int)rand()%15 + 7);
+    BattleField battleField1 = BattleField(1);
+    BattleField battleField2 = BattleField(1);
+    BattleField battleField3 = BattleField(1);
     displayASCII.display("sorcererMainScreen.txt");
     string tempInput;
     cin >> tempInput;

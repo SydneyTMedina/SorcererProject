@@ -20,13 +20,11 @@ private:
     int playerBattleFieldHealth;
     int enemyBattleFieldHealth;
     int maxBattleFieldHealth;
-    int playerDamageMultiplier = 1;
-    int enemyDamageMultiplier = 1;
+    double playerDamageMultiplier = 1;
+    double enemyDamageMultiplier = 1;
     int battleFieldCondition = 0;
     vector<int> playerMinions;
     vector<int> enemyMinions;
-    int playerUnTappedMinions;
-    int enemyUnTappedMinions;
     int damageDifferenceNPC;
     int damageDifferencePlayer;
 
@@ -52,16 +50,18 @@ public:
 
    void resetBattleField();
 
-   int getPlayerDamageMultiplier();
-   void setPlayerDamageMultiplier(int multipier);
-   int getEnemyDamageMultiplier();
-   void setEnemyDamageMultiplier(int multipier);
+   double getPlayerDamageMultiplier();
+   void setPlayerDamageMultiplier(double multipier);
+
+   double getEnemyDamageMultiplier();
+   void setEnemyDamageMultiplier(double multipier);
+
    int getBattleFieldCondition();
    void setBattleFieldCondition(int condition);
    bool playCard(int handIndex, Player &player);
    int playerDealDamage(Player &player, Player &npc, Spell &spell);
    int enemyDealDamage(Player &player, Player &npc, Spell &spell);
-   void abilityExecute(int ability, bool isPlayer)
+   void abilityExecute(int ability, bool isPlayer, Player &player);
    
 
 };

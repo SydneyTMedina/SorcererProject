@@ -104,7 +104,7 @@ int BattleField::getEnemyBattleFieldHealth() {
 }
 
 //Gets the DamageMultiplier
-int BattleField::getPlayerDamageMultiplier() {
+double BattleField::getPlayerDamageMultiplier() {
     return playerDamageMultiplier;
 }
 
@@ -124,12 +124,12 @@ int BattleField::getDamageDifferencePlayer(){
 }
 
 //Gets damage multiplier for NPC
-int BattleField::getEnemyDamageMultiplier() {
+double BattleField::getEnemyDamageMultiplier() {
     return enemyDamageMultiplier;
 }
 
 //Sets damage multiplier for Player
-void BattleField::setPlayerDamageMultiplier(int _multiplier) {
+void BattleField::setPlayerDamageMultiplier(double _multiplier) {
     playerDamageMultiplier = _multiplier;
 }
 
@@ -148,7 +148,7 @@ void BattleField::setdamageDifferencePlayer(int damage){
 }
 
 //Sets damage multiplier for NPC
-void BattleField::setEnemyDamageMultiplier(int _multiplier) {
+void BattleField::setEnemyDamageMultiplier(double _multiplier) {
     enemyDamageMultiplier = _multiplier;
 }
 
@@ -156,6 +156,8 @@ void BattleField::setEnemyDamageMultiplier(int _multiplier) {
 void BattleField::resetBattleField() {
     playerBattleFieldHealth = maxBattleFieldHealth;
     enemyBattleFieldHealth = maxBattleFieldHealth;
+    enemyDamageMultiplier = 1;
+    playerDamageMultiplier = 1;
     playerMinions.clear();
     enemyMinions.clear();
 }
@@ -193,22 +195,17 @@ void BattleField::abilityExecute(int ability, bool isPlayer, Player &player){
           damageDifferencePlayer= damageDifferencePlayer - 2;
 
     }
-    else if(ability==5 || ability==11){//Remove enemy attack  PROBLEM!!!! WE NEED IT TO ONLY ELEIMINATE ONE ATTACK
+    else if(ability==5 || ability==11){//Remove enemy attack 
        if(isPlayer==true)
            enemyDamageMultiplier= 0;
        else
-          playerDamageMultiplier= damageDifferencePlayer - 1;
+          playerDamageMultiplier = 0;
 
     }
-    else if(ability==6){//Draw 2 Cards
+    else if(ability==6){//Draw 3 Cards
            player.drawSpells();
            player.drawSpells();
-
-    }
-    else if(ability==7){//Get the top graveyard card WHATS THE POINT OF A GRAVEYARD
-           player.
-    }
-    else if(ability==8){//Get the 2 top graveyard cards
+           player.drawSpells();
 
     }
     else if(ability==9){//Add 2 mana
@@ -219,8 +216,8 @@ void BattleField::abilityExecute(int ability, bool isPlayer, Player &player){
            player.gainTwoMana();
 
     }
-    else if(ability==12){//Gain 3 health for the battlefield //PROBLEM. What good is battlefield health if that only happens when all cards are gone
-       if(isPlayer==true)//could do get extra action, remove an action
+    else if(ability==12){//Gain 3 health for the battlefield
+       if(isPlayer==true)
            playerBattleFieldHealth= playerBattleFieldHealth + 3;
        else
            enemyBattleFieldHealth= enemyBattleFieldHealth + 3;
@@ -239,25 +236,21 @@ void BattleField::abilityExecute(int ability, bool isPlayer, Player &player){
            damageDifferenceNPC= 4 + damageDifferenceNPC;
 
     }
-    else if(ability==15){//Damage Halfed
+    else if(ability==15){//Damage Doubled
        if(isPlayer==true)
            playerDamageMultiplier=playerDamageMultiplier*2;
       else
            enemyDamageMultiplier=enemyDamageMultiplier*2;
     }
-    else if(ability==16){//Damage Doubled
+    else if(ability==16){//Damage Halfed
       if(isPlayer==true)
            enemyDamageMultiplier=enemyDamageMultiplier/2;
       else
            playerDamageMultiplier=playerDamageMultiplier/2;
     }
     else if(ability==17){//Clear Battlefield. Cards will not go to graveyard If no cards, do they get more actions?
-    int sizeOne=getPlayerMinions.size();
-    int sizeTwo=getEnemyMinions.size();
-      for(int i=0;i<sizeOne;i++){
-          getPlayerMinions().
-
-      }
+        playerMinions.clear();
+        enemyMinions.clear();
     }
 }
 
@@ -273,13 +266,14 @@ bool BattleField::playCard(int handIndex, Player &player) {
         if(cost > player.getMana()) cout << "You don't have enough mana to play this card!" << endl;
         else {
             player.setMana(player.getMana() - cost);
-            if(spell.getSpellHealth() == 0) {
+            if(spell.getSpellAttack() <= 0 || spell.getSpellHealth() <= 0) {
                 abilityExecute(spell.getSpellAbility(),player.isNpc(), player);
-                
+                cout << endl << "You cast " << spell.getSpellName() << endl;
             }
             else {
-                addPlayerMinions(player.getSpellIDHandPos(handIndex));
+                cout << endl << "You summoned " << spell.getSpellName() << endl;
                 abilityExecute(spell.getSpellAbility(),player.isNpc(), player);
+                addPlayerMinions(player.getSpellIDHandPos(handIndex));
             }
             player.removeSpellFromHand(handIndex);
             return true;
@@ -289,8 +283,13 @@ bool BattleField::playCard(int handIndex, Player &player) {
         Spell spell = player.getSpellInHand(handIndex);
         int cost = spell.getSpellManaCost();
         player.setMana(player.getMana() - cost);
-        addEnemyMinions(player.getSpellIDHandPos(handIndex));
-        player.removeSpellFromHand(handIndex);
+        if(spell.getSpellAttack() <= 0 || spell.getSpellHealth() <= 0) {
+            player.removeSpellFromHand(handIndex);
+        }
+        else {
+            addEnemyMinions(player.getSpellIDHandPos(handIndex));
+            player.removeSpellFromHand(handIndex);
+        }        
         return true;
     }
     return false;
@@ -336,6 +335,8 @@ int BattleField::playerDealDamage(Player &player, Player &npc, Spell &spell) {
         }
     
     }
+    playerDamageMultiplier = 1;
+    damageDifferencePlayer = 0;
     return numKills;
 }
 
@@ -345,6 +346,7 @@ int BattleField::enemyDealDamage(Player &player, Player &npc, Spell &spell) {
     int numKills = 0;
     damageTotal = (damageTotal+damageDifferenceNPC) * enemyDamageMultiplier;
     int maxDamage = damageTotal;
+    damageDifferenceNPC = 0;
 
     if(playerMinions.size() == 0) {
         cout << spell.getSpellName() << " delt " << damageTotal << " damage to your battle field!" << endl;
@@ -378,5 +380,7 @@ int BattleField::enemyDealDamage(Player &player, Player &npc, Spell &spell) {
             cout <<  npc.getName() << " delt " << maxDamage << " damage and killed " << numKills << " of your minions!" << endl;
         }
     }
+    enemyDamageMultiplier = 1;
+    damageDifferenceNPC = 0;
     return numKills;
 }
