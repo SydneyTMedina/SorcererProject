@@ -3,8 +3,8 @@ Alluring Enchantress,1,3,3,14
 Alluring Enchantress,1,3,3,14
 Miselda's Infiltrator,1,3,3,10
 Miselda's Infiltrator,1,3,3,10
-Insidious Call,0,0,1,8
-Insidious Call,0,0,1,8
+Insidious Call,0,0,1,0
+Insidious Call,0,0,1,0
 Deep Madness,0,0,1,10
 Deep Madness,0,0,1,10
 Deep Madness,0,0,1,10

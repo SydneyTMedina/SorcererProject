@@ -1,7 +1,7 @@
 Johann Strahl,6,7,10,12
 Mathaeus,8,7,9,20
 Jaques Thibault,6,7,8,19
-Legacy in Blood,0,0,1,7
+Legacy in Blood,0,0,1,0
 Ravonous Aristocrat,5,6,6,6
 Ravonous Aristocrat,5,6,6,6
 Nightveil Hunter,4,5,5,2
