@@ -5,6 +5,11 @@ using namespace std;
 #ifndef  GAME_H
 #define GAME_H
 
+/*
+Class definition for Game
+This vector has a vector for availible characters
+Also has the game win or lose status
+*/
 class Game
 {
 private:
