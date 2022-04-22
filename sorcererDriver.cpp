@@ -14,7 +14,7 @@
 /*
 TO DO:
 Add the rest of the menu options for the main menu like how to play
-Add the story elements in the main function for when you reached a battlefield
+Add the story elements in the main function for when you reached a battlefield -DONE
 Fix looping input bug - DONE
 Finish abilities - DONE
 Add sorting algorithm - DONE
@@ -25,35 +25,69 @@ SUBMIT
 
 using namespace std;
 
+//A little delay for pacing and readability
+void waitForPlayer() {
+    cout << endl << "Press any key + enter..." << endl;
+    string ranIN = "";
+    cin >> ranIN;
+}
+
+/*
+for inputs 1-6 an if statement will correspond. Everything else is invalid
+1-Start Game
+2-How to play
+3-Background story
+4-Past game data
+5-Prints Credit
+6-Quit
+*/
 bool menu(DisplayASCII displayASCII) {
     while(true) {
         string selection = "";
         displayASCII.display("selectScreen.txt");
         cin >> selection;
         if(selection == "1") return true;
-        else if(selection == "2") {
-            //Prints how to play
+        else if(selection == "2") {//HOW TO PLAY
+            cout<<"Upon starting the game use (A,S,D) to move towards the next city (X)"<<endl;
+            cout<<"When you reach the city you will have 10 actions to cast spells, gain mana, or learn new spells."<<endl;
+            cout<<"Each spell costs mana to cast, so be mindful! 10 actions goes fast."<<endl;
+            cout<<"Your NPC opponent will also have 10 actions and their own spells to counter your attacks."<<endl;
+            cout<<"At the end of the 10 actions the damage phase will start. Select which spell you want to attack first."<<endl;
+            cout<<"In order to defeat an enemy minion it's all or nothing! One shot it or it stays standing!"<<endl;
+            cout<<"Once all minions on one side of the battlefield are defeated the battlefield will start to take damage."<<endl;
+            cout<<"To defeat your opponent, eliminate all enemies and deal damage the battlefield!"<<endl;
+            waitForPlayer();
         }
-        else if(selection == "3") {
-            //Prints the games story
+        else if(selection == "3") {//BACKGROUND STORY
+            cout<<"After being mocked by your fellow sorcerer scholars, you have decided to show them your true power."<<endl;
+            cout<<"To prove to them who is the most powerful sorcerer in the land, you have decided to conquer all 3 major cities."<<endl;
+            cout<<"By dominating the battlefield and destrying those who stand in your way, you will prove to all that you are the supreme sorcerer."<<endl;
+            waitForPlayer();
         }
-        else if(selection == "4") {
-            //Print previous games stats by reading the stats file
+        else if(selection == "4") {  //Print previous games stats by reading the stats file
+           
         }
-        else if(selection == "5") displayASCII.display("credits.txt");
-        else if(selection == "6") return false;
+        else if(selection == "5") displayASCII.display("credits.txt"); //PRINTS CREDITS
+        else if(selection == "6") return false;//QUIT
         else {
             cout << "Invalid input" << endl;
         }
     }
 }
 
+/*
+1) Choose character
+2) Choose lineage
+3) Choose Domain
+These choices effect the spells the player will get
+*/
 Player createPC(Game &game) {
     string input;
     vector<string> displayAtEnd;
     string deck1 = "";
     string deck2 = "";
     string deck3 = "";
+    //CHARACTER
     while(true) {
         cout << endl << "Choose your character:" << endl << endl << "1 -> Miselda" << endl << "2 -> Tegu" << endl << "3 -> Zevrane" << endl << "4-> Ariaspes" << endl;
         cin >> input;
@@ -85,6 +119,7 @@ Player createPC(Game &game) {
             cout << "Invalid Input" << endl;
         }
     }
+    //LINEAGE
     while(true) {
         cout << endl << "Choose your lineage:" << endl << endl << "1 -> The Necromancer" << endl << "2 -> The Demonologist" << endl << "3 -> The Bloodlord" << endl << "4-> The Animist" << endl;
         cin >> input;
@@ -112,6 +147,7 @@ Player createPC(Game &game) {
             cout << "Invalid Input" << endl;
         }
     }
+    //DOMAIN
     while(true) {
         cout << endl << "Choose your Domain:" << endl << endl << "1 -> Forgotten Temple" << endl << "2 -> Outcast Sanctuary" << endl << "3 -> Screaming Coast" << endl << "4-> Haunted Forest" << endl;
         cin >> input;
@@ -140,24 +176,27 @@ Player createPC(Game &game) {
         }
     }
     cout << endl << "Your character is: " << displayAtEnd.at(0) << " " << displayAtEnd.at(1) << " Of the " << displayAtEnd.at(2) << endl; 
-    Library library = Library(deck1, deck2, deck3);
+    Library library = Library(deck1, deck2, deck3);//Make the player deck of spells
     Player player = Player(library, false, "", game);
     return player;
 }
 
-void waitForPlayer() {
-    cout << endl << "Press any key + enter..." << endl;
-    string ranIN = "";
-    cin >> ranIN;
-}
-
+/*
+Player always goes first, then NPC
+If no minions are on either side, action phase starts again.
+if no minions on enemy side, X2 damage
+-Choose which spell to attack with
+-Damage is dealt, enemies die
+switch turn
+reset option available
+*/
 int battlePhase(Player player, Player npc, BattleField battleField, DisplayASCII display) {
    
     int input = 0;
     cout << "You go first!" << endl;
 
     while(true) {
-        if(battleField.getEnemyMinions().size() == 0 && battleField.getPlayerMinions().size() == 0) {
+        if(battleField.getEnemyMinions().size() == 0 && battleField.getPlayerMinions().size() == 0) { //checks for no minions on either side
             cout << "No player has any minions on the battle field! Returing to prep-phase" << endl;
             player.resetPlayer();
             npc.resetPlayer();
@@ -168,11 +207,11 @@ int battlePhase(Player player, Player npc, BattleField battleField, DisplayASCII
         display.displayEnemyBattleField(battleField, npc);
         waitForPlayer();
         display.displayBattleField(battleField, player);
-        if(battleField.getPlayerMinions().size() == 0) {
+        if(battleField.getPlayerMinions().size() == 0) {//if no minions on enemy side, X2 damage
             cout << "You have no enemy minions on the battlefield! You will take DOUBLE (2x) damage this turn" << endl;
             battleField.setEnemyDamageMultiplier(2);
         }
-        else { 
+        else { //choose which spell to attack with
             cout << endl << "Which creature do you want to attack with? (Or type -1 to draw and restart)" << endl;
             input = 0;
             cin >> input;
@@ -182,13 +221,13 @@ int battlePhase(Player player, Player npc, BattleField battleField, DisplayASCII
                 cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 continue;
             }
-            if(input  == -1) {
+            if(input  == -1) {//reset
                 player.resetPlayer();
                 npc.resetPlayer();
                 battleField.resetBattleField();
                 return 1;
             }
-            else if(input <= battleField.getPlayerMinions().size() && input >= 1) {
+            else if(input <= battleField.getPlayerMinions().size() && input >= 1) {//do damage with selection
                 Spell spell = player.getLibrary().getSpellAt(battleField.getPlayerMinions().at(input-1));
                 battleField.playerDealDamage(player, npc, spell);
                 waitForPlayer();
@@ -225,11 +264,30 @@ int battlePhase(Player player, Player npc, BattleField battleField, DisplayASCII
     return 0;
 }
 
+/*
+10 actions, 4 choices
+1-Cast spell
+2-Get more spells
+3-Get more mana
+4-See current spells
+
+Player goes first, then NPC
+If a player or NPC runs out of cards, GAME ENDS
+1-Spell checks that there is sufficient mana and if allowed will cast the spell
+2-Will give the player/NPC 2 more spells in their hand
+3-Will give player/NPC 2 more mana
+4-Will display the players spells in ASCII card format
+
+NPC
+NPC is going to choose a random spell in their hand. If they dont have enough mana to play it, NPC will gain 2 mana
+If they do have enough to play it, they will play it
+If they have no cards in their hand they will get 2 spells
+*/
 int actionPhase(Player player, Player npc, BattleField battleField, DisplayASCII display) {
     int actions = 0;
     player.setActions(10);
-    while(actions != 10) {
-        int input = 0;
+    while(actions != 10) {//10 actions
+        int input = 0;//choice time
         cout << endl << "What do you want to do?" << endl << endl << "1 -> Cast a spell" << endl << "2 -> Memorize spells" << 
         endl << "3 -> Gain energy" << endl << "4 -> See spells" << endl;
         player.displayGameInfo();
@@ -240,7 +298,7 @@ int actionPhase(Player player, Player npc, BattleField battleField, DisplayASCII
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             continue;
         }
-        if(input == 1) {
+        if(input == 1) {//Cast spell
             if(display.displayHand(player) == false) continue;
             cout << endl <<"Choose what spell to cast:" << endl;
             cin >> input;
@@ -255,16 +313,16 @@ int actionPhase(Player player, Player npc, BattleField battleField, DisplayASCII
                 continue;
             } 
         }
-        else if(input == 2) {
+        else if(input == 2) {//Get 2 spells
             cout << "You memorized two spells!" << endl;
             player.drawSpells();
             player.drawSpells();
         }
-        else if(input == 3) {
+        else if(input == 3) {//Get 2 mana
             cout << "You gained two mana" << endl;
             player.gainTwoMana();
         }
-        else if(input == 4) {
+        else if(input == 4) {//show spells in ASCII Format
             display.displayHand(player); 
             continue;
         }
@@ -276,10 +334,10 @@ int actionPhase(Player player, Player npc, BattleField battleField, DisplayASCII
         //NPC turn
         srand(time(0));
         int ranNum = 0;
-        if(npc.getHandSize() != 0) {
+        if(npc.getHandSize() != 0) {//generates a random spell choice
             ranNum = int(rand() % npc.getHandSize());
         }
-        if(npc.getHandSize() == 0) {
+        if(npc.getHandSize() == 0) {//checks that there are still spells to be played
             for(int i = 0; i < 2; i++) {
                 if(npc.drawSpells() == 0) {
                     cout << "The enemy sorcer " << npc.getName() << " has run out of spells to cast! You won this battle field!" << endl;
@@ -288,11 +346,11 @@ int actionPhase(Player player, Player npc, BattleField battleField, DisplayASCII
             }
             cout << endl << npc.getName() << " memorized two spells!" << endl;
         }
-        else if(npc.getMana() < npc.getSpellInHand(ranNum).getSpellManaCost()) {
+        else if(npc.getMana() < npc.getSpellInHand(ranNum).getSpellManaCost()) {//not enough mana to play the card they want to play? get 2 mana
             npc.gainTwoMana();
             cout << endl << npc.getName() << " gained two mana!" << endl << endl;
         } 
-        else if(npc.getMana() >= npc.getSpellInHand(ranNum).getSpellManaCost()) {
+        else if(npc.getMana() >= npc.getSpellInHand(ranNum).getSpellManaCost()) {//play spell if possible
             display.displayCard(npc.getSpellInHand(ranNum), true);
             cout << endl << npc.getName() << " cast " << npc.getSpellInHand(ranNum).getSpellName() << " on to the battle field!" << endl;
             battleField.playCard(ranNum, npc);
@@ -307,6 +365,8 @@ int actionPhase(Player player, Player npc, BattleField battleField, DisplayASCII
     return 1;    
 }
 
+
+//uses map class functions with player input to move the player around the map
 Map moveAroundMap(Map map) {
     do {
         char movement;
@@ -337,14 +397,17 @@ int main() {
     //Create characters here
     Player player = createPC(game);
 
+    //NPC 1
     Library npcLib1 = Library(game.getFirstCharacter() + ".txt", "Animist.txt", "Outcast_Sanctuary.txt");
     Player npc1 = Player(npcLib1, true, game.getFirstCharacter(), game);
     game.removeCharacter(0);
 
+    //NPC 2
     Library npcLib2 = Library(game.getFirstCharacter() + ".txt", "Demonologist.txt", "Screaming_Coast.txt");
     Player npc2 = Player(npcLib2, true, game.getFirstCharacter(), game);
     game.removeCharacter(0);
 
+    //NPC 3
     Library npcLib3 = Library(game.getFirstCharacter() + ".txt", "Necromancer.txt", "Haunted_Forest.txt");
     Player npc3 = Player(npcLib3, true, game.getFirstCharacter(), game);
     game.removeCharacter(0);
@@ -353,13 +416,22 @@ int main() {
     int battleFieldsHit = 0;
     map.fillMap();
     map = moveAroundMap(map);
-    //Story for first encounter here
+    //Story for first encounter 
+    cout<<"You have reached the first city and see your foe waiting for your arrival"<<endl;
+    cout<<"The first chapter in your story of fierce combat is about to begin!"<<endl;
+
     actionPhase(player, npc1, battleField1, displayASCII);
     map = moveAroundMap(map);
     //Story for second encounter here
+     cout<<"You have reached the second city and see a sorcerer ready for a fight."<<endl;
+     cout<<"They are going to be in for a nasty beat down..."<<endl;
+
     actionPhase(player, npc2, battleField2, displayASCII);
     map = moveAroundMap(map);
     //Story for third and final encounter here
+     cout<<"You have reached the last city and see the last obstacle in your path to total domination."<<endl;
+     cout<<"Your battle will be legendary!!!"<<endl;
+
     actionPhase(player, npc2, battleField3, displayASCII);
     game.winGame();
 }
