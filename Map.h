@@ -1,9 +1,20 @@
-#include <iostream>
-
-using namespace std; 
-
 #ifndef MAP_H
 #define MAP_H
+
+#include <iostream>
+using namespace std; 
+
+/*
+Class definition for Map
+Has an int to hold a randomly generated map
+3 constants for the # or rows, columns, and sites
+has a 1d array for the player position
+has a 2d array for a copy of the map that can be modified
+has a count for the number of sites won
+
+respective getters/setters
+also includes a funtion to display the map, execute a player's desired move (if valid), and a funtion to fill mapData up
+*/
 
 class Map
 {
@@ -31,7 +42,7 @@ class Map
           // setters
           void setPlayerRowPosition(int row);
           void setPlayerColPosition(int col);
-          void setSitesClaimed(int sitesClaimed);
+          void setSitesClaimed(int sites);
 
           // other
           void displayMap();

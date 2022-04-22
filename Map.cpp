@@ -34,7 +34,7 @@ void Map::fillMap() {
     fin.open(mapName);
     string line=""; 
     int lineCount=0;
-    while(getline(fin,line)){
+    while(getline(fin,line)){//filling in the data
         for(int j = 0; j < num_cols; j++){
             mapData[lineCount][j]=line.at(j);
         }
@@ -89,21 +89,18 @@ bool Map::isMovableSpace(int row, int col){
     return false;
 }
 
-
+//sets player row
 void Map::setPlayerRowPosition(int row) {
     playerPosition[0] = row;
 }
 
-
+//sets player column
 void Map::setPlayerColPosition(int col) {
     playerPosition[1] = col;
 }
 
 /*
  * Algorithm: Make the player move based on the given command 
- * if user inputs w and if its not the top row of the map
- *      Move the player up by one row
- *      return true
  * if user inputs s and if its not the bottom row of the map
  *      Move the player down by one row
  *      return true
@@ -113,18 +110,13 @@ void Map::setPlayerColPosition(int col) {
  * if user inputs d and if its not the rightmost column
  *      Move the player right by one column
  *      return true
+ * 
+ * NO MOVING UP SO NO W
+ * 
  * Parameters: move (char)
  * Return: boolean (bool)
  */
-bool Map::executeMove(char move){
-    /*
-    // if user inputs w, move up if it is an allowed move
-    if(!(playerPosition[0] == 0) && (tolower(move) == 'w') && isMovableSpace(playerPosition[0]-1, playerPosition[1])==true){
-        playerPosition[0] -= 1;
-        return true; 
-    }
-    */
-   
+bool Map::executeMove(char move){ 
     // if user inputs s, move down if it is an allowed move
     if(!(playerPosition[0] == (num_rows - 1))&& (tolower(move) == 's') && isMovableSpace(playerPosition[0]+1, playerPosition[1])==true){
         playerPosition[0] += 1;
