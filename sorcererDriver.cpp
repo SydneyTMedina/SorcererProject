@@ -14,20 +14,12 @@
 
 using namespace std;
 
-vector<string> splitVector(string inputString, char separator, vector<string> vect) {
-    int currentSeparator = 0;
-    if (inputString.size() == 0) return vect;
-    inputString = inputString + separator;
-    for(int i = 0; i < inputString.size(); i++) {
-        if(inputString[i] == separator) {
-            string toAdd = inputString.substr(currentSeparator, i-currentSeparator);
-            vect.push_back(toAdd);
-            currentSeparator = i + 1;
-        }
-    }
-    return vect;
-}
-
+/*
+Takes a filename and the data to be added to the file
+Opens the file stream and checks if it is open
+If it is open, write the data to the file
+Close the file
+*/
 void writeOutFile(string filename, string data) {
     ofstream file;
     file.open(filename);
@@ -37,6 +29,13 @@ void writeOutFile(string filename, string data) {
     }
     
 }
+
+/*
+Takes a filename and location
+Opens the file stream and checks if it is open
+If it is open, loop through all the data and write it to a vector
+Return the data in the vector in the input location
+*/
 
 string readLineFile(string filename, int location) {
     string line = "";
@@ -51,9 +50,9 @@ string readLineFile(string filename, int location) {
     return fileOut.at(location);
 }
 
+
+
 void addKillsToFile(int kills) {
-    ifstream file;
-    file.open("statsFiles/kills.txt");
     int numKillsInFile = stoi(readLineFile("statsFiles/kills.txt", 0));
     numKillsInFile += kills;
     //File write
