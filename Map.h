@@ -1,3 +1,9 @@
+/*
+CSCI1300 - Project 3
+Luca Voeller
+Sydney Medina
+*/
+
 #ifndef MAP_H
 #define MAP_H
 

@@ -1,5 +1,12 @@
+/*
+CSCI1300 - Project 3
+Luca Voeller
+Sydney Medina
+*/
+
 #include <iostream>
 #include <vector>
+#include <fstream>
 #include "Game.h"
 
 //Nothing to construct initially 
@@ -15,6 +22,12 @@ void Game::removeCharacter(int _index) {
 void Game::winGame() {
     wonGame = true;
     cout << "You have captured all the cities! Congratulations, you have won and become the most powerful sorcerer in the world!" << endl;
+    ofstream file;
+    file.open("statsFiles/gameOutCome.txt");
+    if(file.is_open()) {
+        file << "Won";
+        file.close();
+    }
     exit(0);
 }
 
@@ -25,6 +38,12 @@ void Game::loseGame(int _condition) {
     }
     else if(_condition == 2) {
         cout << "Your opponent has captured the battlefield! You can no longer become the most powerful sorcerer." << endl << endl << "GAME OVER" << endl; 
+    }
+    ofstream file;
+    file.open("statsFiles/gameOutCome.txt");
+    if(file.is_open()) {
+        file << "Lost";
+        file.close();
     }
     exit(0);
 
