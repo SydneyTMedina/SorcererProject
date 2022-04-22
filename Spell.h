@@ -25,18 +25,18 @@ public:
     Spell();
     Spell(string name, int health, int attack, int manaCost, int ability);
     string getSpellName();
+    //getters
     int getSpellHealth();
     int getSpellAttack();
     int getSpellManaCost();
     int getSpellAbility();
+    //setters
     void setSpellName(string name);
     void setSpellHealth(int health);
     void setSpellAttack(int attack);
     void setSpellManaCost(int mana);
     void setSpellAbility(int ability);
     void displaySpell();
-    bool isTapped();
-    void setIsTapped(bool _tapped);
 };
 
 #endif
