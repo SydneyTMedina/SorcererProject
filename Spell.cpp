@@ -72,11 +72,3 @@ void Spell::setSpellAbility(int _ability) {
     spellAbility = _ability;
 }
 
-void Spell::setIsTapped(bool _tapped) {
-    tapped = _tapped;
-}
-
-bool Spell::isTapped() {
-    return tapped;
-}
-

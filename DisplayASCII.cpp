@@ -95,7 +95,7 @@ bool DisplayASCII::displayBattleField(BattleField _battleField, Player player) {
     for(int i = 0; i < _battleField.getPlayerMinions().size(); i++) {
         cout << "------Minion " << i+1  << "------"<< endl;
         Spell spell = player.getLibrary().getSpellAt(_battleField.getPlayerMinions().at(i));
-        if(!spell.isTapped()) displayCard(spell, false);        
+        displayCard(spell, false);        
     }
     cout << endl << "Scroll up to look at your minions" << endl;
     return true;
@@ -109,7 +109,7 @@ bool DisplayASCII::displayEnemyBattleField(BattleField _battleField, Player npc)
     }
     for(int i = 0; i < _battleField.getEnemyMinions().size(); i++) {
         Spell spell = npc.getLibrary().getSpellAt(_battleField.getEnemyMinions().at(i));
-        if(!spell.isTapped()) displayCard(spell,false);        
+        displayCard(spell,false);        
     }
     cout << endl << "Scroll up to look at the enemy minions on the battlefield" << endl;
     return true;

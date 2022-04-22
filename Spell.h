@@ -19,7 +19,6 @@ private:
     int spellManaCost;
     int spellAbility;
     int fireTokens = 0;
-    bool tapped = false;
     
 public:
     Spell();

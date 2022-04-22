@@ -384,7 +384,6 @@ At the end, read out the damage dealt and # of enemies killed (if any were)
 */
 int BattleField::enemyDealDamage(Player &player, Player &npc, Spell &spell) {
     int damageTotal = spell.getSpellAttack();
-    spell.setIsTapped(true);
     int numKills = 0;
     damageTotal = (damageTotal+damageDifferenceNPC) * enemyDamageMultiplier;
     int maxDamage = damageTotal;

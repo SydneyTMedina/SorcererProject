@@ -27,7 +27,6 @@ void writeOutFile(string filename, string data) {
         file << data;
         file.close();
     }
-    
 }
 
 /*
@@ -36,7 +35,6 @@ Opens the file stream and checks if it is open
 If it is open, loop through all the data and write it to a vector
 Return the data in the vector in the input location
 */
-
 string readLineFile(string filename, int location) {
     string line = "";
     ifstream file;
@@ -50,8 +48,7 @@ string readLineFile(string filename, int location) {
     return fileOut.at(location);
 }
 
-
-
+//stores number of kills by adding to the file
 void addKillsToFile(int kills) {
     int numKillsInFile = stoi(readLineFile("statsFiles/kills.txt", 0));
     numKillsInFile += kills;
@@ -70,8 +67,6 @@ Make sure code meets requirements
 Add file output with the stats
 SUBMIT
 */
-
-using namespace std;
 
 //A little delay for pacing and readability
 void waitForPlayer() {
@@ -95,18 +90,58 @@ bool menu(DisplayASCII displayASCII) {
         displayASCII.display("selectScreen.txt");
         cin >> selection;
         if(selection == "1") return true;
-        else if(selection == "2") {//HOW TO PLAY
-            cout<<"Upon starting the game use (A,S,D) to move towards the next city (X)"<<endl;
-            cout<<"When you reach the city you will have 10 actions to cast spells, gain mana, or learn new spells."<<endl;
-            cout<<"Each spell costs mana to cast, so be mindful! 10 actions goes fast."<<endl;
-            cout<<"Your NPC opponent will also have 10 actions and their own spells to counter your attacks."<<endl;
-            cout<<"At the end of the 10 actions the damage phase will start. Select which spell you want to attack first."<<endl;
-            cout<<"In order to defeat an enemy minion it's all or nothing! One shot it or it stays standing!"<<endl;
-            cout<<"Once all minions on one side of the battlefield are defeated the battlefield will start to take damage."<<endl;
-            cout<<"To defeat your opponent, eliminate all enemies and deal damage the battlefield!"<<endl;
-            waitForPlayer();
+        else if(selection == "2") {//HOW TO PLAY   SECONDARY MENU
+            bool status=true;
+            string selection="";
+            
+
+          while(status==true){
+            ifstream fin;
+            fin.open("images/menuOpTwo.txt");
+            string line=""; 
+            if(!fin.is_open()) cout<<"NOT OPEN"<<endl;
+
+               while(getline(fin,line)){//NESTED WHILE LOOP
+                 cout<<line<<endl;
+               }
+               fin.close();
+            cout<<"Please enter your selection: "<<endl;
+            cin>>selection;
+            if(selection=="1"){//1: How to move
+              cout<<"Upon starting the game use (A,S,D) to move towards the next city (X)"<<endl;
+              waitForPlayer();
+            }
+            else if(selection=="2"){//2: Player Action Phase
+              cout<<"When you reach the city you will have 10 actions to cast spells, gain mana, or learn new spells."<<endl;
+              cout<<"Each spell costs mana to cast, so be mindful! 10 actions goes fast."<<endl;
+              cout<<"At the end of the 10 actions the damage phase will start. Select which spell you want to attack first."<<endl;
+              cout<<"In order to defeat an enemy minion it's all or nothing! One shot it or it stays standing!"<<endl;
+              waitForPlayer();
+           }
+           else if(selection=="3"){//3: NPC Action Phase
+             cout<<"Your NPC opponent will also have 10 actions and their own spells to counter your attacks."<<endl;
+             waitForPlayer();
+           }
+           else if(selection=="4"){//4: Battlefield damage
+             cout<<"Once all minions on one side of the battlefield are defeated the battlefield will start to take damage."<<endl;
+             cout<<"At the end of the 10 actions the damage phase will start. Select which spell you want to attack first."<<endl;
+             cout<<"In order to defeat a player minion it's all or nothing as well!"<<endl;
+             waitForPlayer();
+           }
+           else if(selection=="5"){//5: How to win 
+             cout<<"To defeat your opponent, eliminate all enemies and deal damage the battlefield!"<<endl;
+             waitForPlayer();
+           }
+           else if(selection=="6"){//quit
+             status=false;
+            }    
+           else{
+             cout<<"Invalid Input"<<endl;
+             waitForPlayer();
+           }
+              }
         }
-        else if(selection == "3") {//BACKGROUND STORY
+        else if(selection == "3") {     //BACKGROUND STORY
             cout<<"After being mocked by your fellow sorcerer scholars, you have decided to show them your true power."<<endl;
             cout<<"To prove to them who is the most powerful sorcerer in the land, you have decided to conquer all 3 major cities."<<endl;
             cout<<"By dominating the battlefield and destrying those who stand in your way, you will prove to all that you are the supreme sorcerer."<<endl;
