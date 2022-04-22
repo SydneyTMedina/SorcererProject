@@ -1,24 +1,17 @@
-//ABILITY KEY
-0-none
-1-Add 2 health
-2-Subtract 2 health //do 2 damage
-3-Add 1 attack
-4-Add 2 attack
-5-Subtract 1 attack from enemy
-6-Subtract 2 attack from enemy
-7-Draw 2 Cards
-8-Get top graveyard card
-9-Gain 4 Mana
-10-Weaken by 2
-11-Weaken by 5 //leg
-12-Clear battlefield //leg
-13-Play another card and gain 3 mana
-14-Exahst an enemy minion 
-15-Heal 2
-16-Heal 5 //leg
-17-Add 2 mana
-18-Heal 3 from battlefield
-19-Heal 5 from battlefield //leg
-20-Add 2 attack to 2 minions//leg
-
-name, health, attack, manaCost, ability
+Add 1 attack
+Add 2 attack
+Subtract 1 attack from the enemy
+Subtract 2 attack from the enemy
+Remove enemy attack
+Draw 2 Cards
+Get the top graveyard card
+Get Top 2 of the graveyard
+Add 2 mana
+Gain 4 Mana
+Go to 5
+Gain 3 health for the battlefield
+Gain 5 health for  battlefield //leg
+Add 4 attack
+Damage Halfed //leg
+Damage Doubled //leg
+Clear battlefield //leg

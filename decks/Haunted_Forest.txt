@@ -1,10 +1,10 @@
-Reth,3,4,4,13
-Blazing Heretic,1,5,4,10
-Blazing Heretic,1,5,4,10
-Blazing Heretic,1,5,4,10
-Dread Wight,1,3,3,10
-Dread Wight,1,3,3,10
-Caretaker,4,5,5,17
-Caretaker,4,5,5,17
-Stray Sinner,2,2,2,0
-Stray Sinner,2,2,2,0
+Reth,3,4,4,11
+Blazing Heretic,1,5,4,4
+Blazing Heretic,1,5,4,4
+Blazing Heretic,1,5,4,4
+Dread Wight,1,3,3,4
+Dread Wight,1,3,3,4
+Caretaker,4,5,5,9
+Caretaker,4,5,5,9
+Stray Sinner,2,2,2,7
+Stray Sinner,2,2,2,7

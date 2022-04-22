@@ -1,20 +1,20 @@
-Marina Erechin,4,5,5,16
-Queen's Gambit,0,0,3,6
-Brood Guard,3,3,5,13
-Brood Guard,3,3,5,13
-Entomophobia,0,0,1,5
-Entomophobia,0,0,1,5
-Lord of the Flies,5,1,5,14
-Lord of the Flies,5,1,5,14
-Reshape the Mind,0,0,2,10
-Reshape the Mind,0,0,2,10
-Oberon's Emissary,4,2,3,0
-Oberon's Emissary,4,2,3,0
-Titania's Tear,3,1,1,3
-Titania's Tear,3,1,1,3
-Oberon's Sentry,2,2,2,0
-Oberon's Sentry,2,2,2,0
-Oberon's Sentry,2,2,2,0
+Marina Erechin,4,5,5,15
+Queen's Gambit,0,0,3,4
+Brood Guard,3,3,5,11
+Brood Guard,3,3,5,11
+Entomophobia,0,0,1,3
+Entomophobia,0,0,1,3
+Lord of the Flies,5,1,5,5
+Lord of the Flies,5,1,5,5
+Reshape the Mind,0,0,2,4
+Reshape the Mind,0,0,2,4
+Oberon's Emissary,4,2,3,6
+Oberon's Emissary,4,2,3,6
+Titania's Tear,3,1,1,1
+Titania's Tear,3,1,1,1
+Oberon's Sentry,2,2,2,6
+Oberon's Sentry,2,2,2,6
+Oberon's Sentry,2,2,2,6
 Webspinner,2,1,1,0
 Webspinner,2,1,1,0
 Webspinner,2,1,1,0

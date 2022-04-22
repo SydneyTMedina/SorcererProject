@@ -1,10 +1,10 @@
-Amathaunta,8,7,9,12
-Alluring Enchantress,1,3,3,14
-Alluring Enchantress,1,3,3,14
-Miselda's Infiltrator,1,3,3,10
-Miselda's Infiltrator,1,3,3,10
-Insidious Call,0,0,1,0
-Insidious Call,0,0,1,0
-Deep Madness,0,0,1,10
-Deep Madness,0,0,1,10
-Deep Madness,0,0,1,10
+Amathaunta,8,7,9,17
+Alluring Enchantress,1,3,3,5
+Alluring Enchantress,1,3,3,5
+Miselda's Infiltrator,1,3,3,4
+Miselda's Infiltrator,1,3,3,4
+Insidious Call,0,0,1,7
+Insidious Call,0,0,1,7
+Deep Madness,0,0,1,4
+Deep Madness,0,0,1,4
+Deep Madness,0,0,1,4

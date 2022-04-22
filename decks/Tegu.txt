@@ -1,10 +1,10 @@
-Narangerel,4,4,5,7
+Narangerel,4,4,5,15
 Sarangerel,4,4,4,16
-Sadistic Ceremony,0,0,1,13
-Sadistic Ceremony,0,0,1,13
-Butcher's Cleaver,2,2,1,10
-Butcher's Cleaver,2,2,1,10
-Butcher's Cleaver,2,2,1,10
-Tegu's Resolve,0,0,1,15
-Tegu's Resolve,0,0,1,15
-Tegu's Resolve,0,0,1,15
+Sadistic Ceremony,0,0,1,8
+Sadistic Ceremony,0,0,1,8
+Butcher's Cleaver,2,2,1,4
+Butcher's Cleaver,2,2,1,4
+Butcher's Cleaver,2,2,1,4
+Tegu's Resolve,0,0,1,6
+Tegu's Resolve,0,0,1,6
+Tegu's Resolve,0,0,1,6

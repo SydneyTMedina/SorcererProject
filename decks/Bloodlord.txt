@@ -1,20 +1,20 @@
-Johann Strahl,6,7,10,12
-Mathaeus,8,7,9,20
-Jaques Thibault,6,7,8,19
-Legacy in Blood,0,0,1,0
-Ravonous Aristocrat,5,6,6,6
-Ravonous Aristocrat,5,6,6,6
+Johann Strahl,6,7,10,17
+Mathaeus,8,7,9,14
+Jaques Thibault,6,7,8,13
+Legacy in Blood,0,0,1,6
+Ravonous Aristocrat,5,6,6,4
+Ravonous Aristocrat,5,6,6,4
 Nightveil Hunter,4,5,5,2
 Nightveil Hunter,4,5,5,2
-Soul Eater,1,2,1,10
-Soul Eater,1,2,1,10
-Soul Eater,1,2,1,10
-Voiceless Covenant,3,4,4,3
-Voiceless Covenant,3,4,4,3
-Voiceless Covenant,3,4,4,3
-Coven Concubine,2,3,3,5
-Coven Concubine,2,3,3,5
-Coven Concubine,2,3,3,5
-Blood Bath,0,0,1,17
-Blood Bath,0,0,1,17
-Blood Bath,0,0,1,17
+Soul Eater,1,2,1,4
+Soul Eater,1,2,1,4
+Soul Eater,1,2,1,4
+Voiceless Covenant,3,4,4,1
+Voiceless Covenant,3,4,4,1
+Voiceless Covenant,3,4,4,1
+Coven Concubine,2,3,3,3
+Coven Concubine,2,3,3,3
+Coven Concubine,2,3,3,3
+Blood Bath,0,0,1,9
+Blood Bath,0,0,1,9
+Blood Bath,0,0,1,9

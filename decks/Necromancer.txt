@@ -1,20 +1,20 @@
 Vengeful Mummy,2,2,1,0
 Vengeful Mummy,2,2,1,0
 Vengeful Mummy,2,2,1,0
-Lord of the Undead,3,4,5,4
-Lord of the Undead,3,4,5,4
-Lord of the Undead,3,4,5,4
-Book of the Dead,2,2,1,0
-Book of the Dead,2,2,1,0
-Book of the Dead,2,2,1,0
-Council of Three,2,2,2,0
-Council of Three,2,2,2,0
-Council of Three,2,2,2,0
-Raise the Dead,0,0,2,13
-Raise the Dead,0,0,2,13
-Rat Catcher,1,2,3,13
-Rat Catcher,1,2,3,13
-Foul Necromancer,4,3,4,13
-Sekhmet's Champion,3,5,4,10
-Graveborn Warden,3,2,2,0
-Underworld Guide,4,2,3,6
+Lord of the Undead,3,4,5,2
+Lord of the Undead,3,4,5,2
+Lord of the Undead,3,4,5,2
+Book of the Dead,2,2,1,6
+Book of the Dead,2,2,1,6
+Book of the Dead,2,2,1,6
+Council of Three,2,2,2,6
+Council of Three,2,2,2,6
+Council of Three,2,2,2,6
+Raise the Dead,0,0,2,11
+Raise the Dead,0,0,2,11
+Rat Catcher,1,2,3,11
+Rat Catcher,1,2,3,11
+Foul Necromancer,4,3,4,11
+Sekhmet's Champion,3,5,4,4
+Graveborn Warden,3,2,2,7
+Underworld Guide,4,2,3,4
