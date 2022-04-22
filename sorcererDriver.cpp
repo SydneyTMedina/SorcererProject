@@ -9,12 +9,61 @@
 #include <stdlib.h>
 #include <time.h>
 #include <vector>
+#include <fstream>
+#include <string>
 
+using namespace std;
+
+vector<string> splitVector(string inputString, char separator, vector<string> vect) {
+    int currentSeparator = 0;
+    if (inputString.size() == 0) return vect;
+    inputString = inputString + separator;
+    for(int i = 0; i < inputString.size(); i++) {
+        if(inputString[i] == separator) {
+            string toAdd = inputString.substr(currentSeparator, i-currentSeparator);
+            vect.push_back(toAdd);
+            currentSeparator = i + 1;
+        }
+    }
+    return vect;
+}
+
+void writeOutFile(string filename, string data) {
+    ofstream file;
+    file.open(filename);
+    if(file.is_open()) {
+        file << data;
+        file.close();
+    }
+    
+}
+
+string readLineFile(string filename, int location) {
+    string line = "";
+    ifstream file;
+    vector<string> fileOut;
+    file.open(filename);
+    if(file.is_open()) {
+        while(getline(file, line)) {
+            fileOut.push_back(line);
+        }         
+    }
+    return fileOut.at(location);
+}
+
+void addKillsToFile(int kills) {
+    ifstream file;
+    file.open("statsFiles/kills.txt");
+    int numKillsInFile = stoi(readLineFile("statsFiles/kills.txt", 0));
+    numKillsInFile += kills;
+    //File write
+    writeOutFile("statsFiles/kills.txt", to_string(numKillsInFile));
+}
 
 /*
 TO DO:
-Add the rest of the menu options for the main menu like how to play
-Add the story elements in the main function for when you reached a battlefield -DONE
+Add the rest of the menu options for the main menu like how to play - DONE
+Add the story elements in the main function for when you reached a battlefield - DONE
 Fix looping input bug - DONE
 Finish abilities - DONE
 Add sorting algorithm - DONE
@@ -65,9 +114,17 @@ bool menu(DisplayASCII displayASCII) {
             waitForPlayer();
         }
         else if(selection == "4") {  //Print previous games stats by reading the stats file
-           
+            cout << endl <<"---Last game stats---" << endl;
+            cout << endl << "Played as: " << readLineFile("statsFiles/charName.txt", 0) << endl;
+            cout << "Kills: " << readLineFile("statsFiles/kills.txt", 0) << endl;
+            cout << "Sites Captured: " << readLineFile("statsFiles/sites.txt", 0) << endl;
+            cout << "Game Outcome: " << readLineFile("statsFiles/gameOutCome.txt", 0) << endl;        
+            waitForPlayer();    
         }
-        else if(selection == "5") displayASCII.display("credits.txt"); //PRINTS CREDITS
+        else if(selection == "5") {
+            displayASCII.display("credits.txt"); //PRINTS CREDITS
+            waitForPlayer();
+        }
         else if(selection == "6") return false;//QUIT
         else {
             cout << "Invalid input" << endl;
@@ -176,6 +233,7 @@ Player createPC(Game &game) {
         }
     }
     cout << endl << "Your character is: " << displayAtEnd.at(0) << " " << displayAtEnd.at(1) << " Of the " << displayAtEnd.at(2) << endl; 
+    writeOutFile("statsFiles/charName.txt", displayAtEnd.at(0) + " " + displayAtEnd.at(1) + " Of the " + displayAtEnd.at(2));
     Library library = Library(deck1, deck2, deck3);//Make the player deck of spells
     Player player = Player(library, false, "", game);
     return player;
@@ -229,7 +287,8 @@ int battlePhase(Player player, Player npc, BattleField battleField, DisplayASCII
             }
             else if(input <= battleField.getPlayerMinions().size() && input >= 1) {//do damage with selection
                 Spell spell = player.getLibrary().getSpellAt(battleField.getPlayerMinions().at(input-1));
-                battleField.playerDealDamage(player, npc, spell);
+                int kills = battleField.playerDealDamage(player, npc, spell);
+                addKillsToFile(kills);
                 waitForPlayer();
 
                 if(battleField.getBattleFieldCondition() == 1) {
@@ -394,6 +453,7 @@ int main() {
     cin >> tempInput;
     bool menuSelect = menu(displayASCII);
     if(menuSelect == false) return 0;
+    
     //Create characters here
     Player player = createPC(game);
 
@@ -412,22 +472,27 @@ int main() {
     Player npc3 = Player(npcLib3, true, game.getFirstCharacter(), game);
     game.removeCharacter(0);
 
+    //Clear previous files
+    writeOutFile("statsFiles/kills.txt", "0");
+
     //Map loop here
-    int battleFieldsHit = 0;
     map.fillMap();
     map = moveAroundMap(map);
+    writeOutFile("statsFiles/sites.txt", "1");
     //Story for first encounter 
     cout<<"You have reached the first city and see your foe waiting for your arrival"<<endl;
     cout<<"The first chapter in your story of fierce combat is about to begin!"<<endl;
 
     actionPhase(player, npc1, battleField1, displayASCII);
     map = moveAroundMap(map);
+    writeOutFile("statsFiles/sites.txt", "2");
     //Story for second encounter here
      cout<<"You have reached the second city and see a sorcerer ready for a fight."<<endl;
      cout<<"They are going to be in for a nasty beat down..."<<endl;
 
     actionPhase(player, npc2, battleField2, displayASCII);
     map = moveAroundMap(map);
+    writeOutFile("statsFiles/sites.txt", "3");
     //Story for third and final encounter here
      cout<<"You have reached the last city and see the last obstacle in your path to total domination."<<endl;
      cout<<"Your battle will be legendary!!!"<<endl;
