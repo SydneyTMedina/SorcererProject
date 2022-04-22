@@ -54,6 +54,7 @@ void Player::setMana(int _mana) {
     mana = _mana;
 }
 
+//player/ NPC gains 2 mana
 void Player::gainTwoMana() {
     int newMana = mana + 2;
     if(newMana >= 10) {
@@ -85,6 +86,7 @@ int Player::drawSpells() {
     return 1;
 }
 
+//puts a spell in a separate graveyard vector
 void Player::putSpellInGraveyard(int cardNum) {
     playerGraveyard.insert(playerGraveyard.begin() + 0, cardNum);
 }
@@ -105,6 +107,7 @@ void Player::shuffleDeck() {
     shuffle(playerDeck.begin(), playerDeck.end(), e);
 }
 
+//helper for sorting algorithm
 bool Player::compareFunction(int a, int b) {
     string string1 = playerLibrary.getSpellAt(a).getSpellName();
     string string2 = playerLibrary.getSpellAt(b).getSpellName();
@@ -129,26 +132,32 @@ void Player::displayGameInfo() {
     cout << endl << "You have " << getMana() << " mana and have " << getActions() << " actions left." << endl; 
 }
 
+//returns the player hand size
 int Player::getHandSize() {
     return playerHand.size();
 }
 
+//returns the library object playerLibrary
 Library Player::getLibrary() {
     return playerLibrary;
 }
 
+//returns the name of the player/ NPC
 string Player::getName() {
     return name;
 }
 
+//returns the spell at the specified position 
 Spell Player::getSpellInHand(int _pos) {
     return playerLibrary.getSpellAt(playerHand.at(_pos));
 }
 
+//returns if its a player or NPC
 bool Player::isNpc() {
     return NPC;
 }
 
+//resets a player
 void Player::resetPlayer() {
     actions = 10;
     mana = 6;
@@ -166,6 +175,7 @@ void Player::resetPlayer() {
     sortHand();
 }
 
+//returns a vector playerHand
 vector<int> Player::getPlayerHand() {
     return playerHand;
 }
