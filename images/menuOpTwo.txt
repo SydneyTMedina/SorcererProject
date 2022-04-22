@@ -1,0 +1,6 @@
+1: How to move
+2: Player Action Phase
+3: NPC Action Phase
+4: Battlefield damage
+5: How to win 
+6: Quit
