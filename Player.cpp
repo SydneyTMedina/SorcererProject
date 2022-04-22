@@ -17,6 +17,7 @@ Sets the library
 Initializes the player library by adding values to it up to the size of the library
 Clears the grave yard
 Shuffles the library and draws 5 cards
+Gives the player a 50% chance to get a extra card
 */
 Player::Player(Library &deck, bool _isNPC, string _name, Game _game) {
     game = _game;
@@ -29,6 +30,11 @@ Player::Player(Library &deck, bool _isNPC, string _name, Game _game) {
     }
     shuffleDeck();
     for(int i = 0; i < 4; i++) {
+        drawSpells();
+    }
+    srand(time(0));
+    int getExtraCard = round((float) rand()/RAND_MAX);
+    if(getExtraCard == 1) {
         drawSpells();
     }
     sortHand();
