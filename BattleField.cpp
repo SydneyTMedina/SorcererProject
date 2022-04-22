@@ -30,7 +30,7 @@ void BattleField::addEnemyMinions(int _spell) {
 }
 
 /*
-Searches through entire list of player minions and finds a minion with a matching id and removes them
+Searches through entire list of player minions and finds a minion with a matching ID and removes them
 */
 bool BattleField::removePlayerMinion(int _spell) {
     for(int i = 0; i < playerMinions.size(); i++) {
@@ -43,7 +43,7 @@ bool BattleField::removePlayerMinion(int _spell) {
 }
 
 /*
-Searches through entire list of enemy minions and finds a minion with a matching id and removes them
+Searches through entire list of enemy minions and finds a minion with a matching ID and removes them
 */
 bool BattleField::removeEnemyMinion (int _spell) {
     for(int i = 0; i < enemyMinions.size(); i++) {
@@ -142,6 +142,7 @@ void BattleField::setBattleFieldCondition(int _condition) {
 void BattleField::setdamageDifferenceNPC(int damage){
     damageDifferenceNPC=damage;
 }
+
 //Sets damage modifier for Player
 void BattleField::setdamageDifferencePlayer(int damage){
     damageDifferencePlayer=damage;
@@ -256,11 +257,23 @@ void BattleField::abilityExecute(int ability, bool isPlayer, Player &player){
 
 
 //Plays a card from the hand onto the battlefield
+/*
+make sure that the choise is a valid spell choice
+make sure that there is enough mana to play the spell
+Not enough? return false
+There's enough? Subtract the used mana from the mana pool
+if its a spell only, just call the ability
+if its a creature, call the ability AND add it to the battlefield
+remove the cast spell
+return true
+
+Make 2 verions. 1 for Player 1 for NPC
+*/
 bool BattleField::playCard(int handIndex, Player &player) {
     if(handIndex < 0 || handIndex >= player.getHandSize()) {
         return false;
     }
-    if(player.isNpc() == false) {
+    if(player.isNpc() == false) {//PLAYER
         Spell spell = player.getSpellInHand(handIndex);
         int cost = spell.getSpellManaCost();
         if(cost > player.getMana()) cout << "You don't have enough mana to play this card!" << endl;
@@ -279,7 +292,7 @@ bool BattleField::playCard(int handIndex, Player &player) {
             return true;
         }   
     }
-    else {
+    else {//NPC
         Spell spell = player.getSpellInHand(handIndex);
         int cost = spell.getSpellManaCost();
         player.setMana(player.getMana() - cost);
@@ -295,9 +308,23 @@ bool BattleField::playCard(int handIndex, Player &player) {
     return false;
 }
 
+/*
+Gather initial damage to be dealt
+To keep track of kills, we are going to make a counter for that. set to 0
+To calculate the actual amount of damage we are going to take the initial damage amount, add the damageDifference...
+... and multiply all of that by the damageMultiplier
+
+If there are no enemies, deal damage to the battlefield
+If there are enemies:
+we need to keep track of the enemies killed so lets make a vector for that
+this vector will be used to keep track of what needs to be removed from the battlefield
+if an enemy is killed it is removed from the battlefield and killCount is updated 
+At the end, read out the damage dealt and # of enemies killed (if any were)
+
+**reset damage multiplyer and difference at the end of the initial attack
+*/
 int BattleField::playerDealDamage(Player &player, Player &npc, Spell &spell) {
     int damageTotal = spell.getSpellAttack();
-    spell.setIsTapped(true);
     int numKills = 0;
     damageTotal = (damageTotal+damageDifferencePlayer) * playerDamageMultiplier;
     int maxDamage = damageTotal;
@@ -317,7 +344,6 @@ int BattleField::playerDealDamage(Player &player, Player &npc, Spell &spell) {
         }
         //If killed
         for(int i = 0; i < minionsKilled.size(); i++) {
-            npc.putSpellInGraveyard(enemyMinions.at(0));
             removeEnemyMinion(enemyMinions.at(0));
             numKills++;
         }
@@ -340,6 +366,22 @@ int BattleField::playerDealDamage(Player &player, Player &npc, Spell &spell) {
     return numKills;
 }
 
+
+/*
+Gather initial damage to be dealt
+To keep track of kills, we are going to make a counter for that. set to 0
+To calculate the actual amount of damage we are going to take the initial damage amount, add the damageDifference...
+... and multiply all of that by the damageMultiplier
+
+If there are no enemies, deal damage to the battlefield
+If there are enemies:
+we need to keep track of the enemies killed so lets make a vector for that
+this vector will be used to keep track of what needs to be removed from the battlefield
+if an enemy is killed it is removed from the battlefield and killCount is updated 
+At the end, read out the damage dealt and # of enemies killed (if any were)
+
+**reset damage multiplyer and difference at the end of the initial attack
+*/
 int BattleField::enemyDealDamage(Player &player, Player &npc, Spell &spell) {
     int damageTotal = spell.getSpellAttack();
     spell.setIsTapped(true);
@@ -363,7 +405,6 @@ int BattleField::enemyDealDamage(Player &player, Player &npc, Spell &spell) {
         }
         //If killed
         for(int i = 0; i < minionsKilled.size(); i++) {
-            player.putSpellInGraveyard(playerMinions.at(0));
             removePlayerMinion(playerMinions.at(0));
             numKills++;
         }
